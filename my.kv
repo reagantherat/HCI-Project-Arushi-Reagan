@@ -1,3 +1,35 @@
 <CreateEvent>
-    Label:
-        text: "testing text"
+    GridLayout:
+        cols: 1
+        size: root.width, root.height
+        
+        GridLayout:
+            cols: 2
+            Label:
+                text: "go back"
+            Label:
+                text: "CREATE EVENT"
+        Label:
+            text: "Event Name"
+        TextInput:
+            multiline: False
+        Label:
+            text: "Event Organizer"
+        TextInput:
+            multiline: False
+        Label:
+            text: "Event Location"
+        TextInput:
+            multiline: False
+        Label:
+            text: "Start time"
+        Label:
+            text: "End time"
+        Label: 
+            text: "Date"
+        Label:
+            text: "Description"
+        TextInput:
+            multiline: True   
+        Button:
+            text: "Create event"
