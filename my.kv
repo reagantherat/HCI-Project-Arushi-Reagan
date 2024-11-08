@@ -19,14 +19,24 @@ WindowManager:
         cols: 3
         Button: 
             text: "Jan"
+            on_release: root.month_select("Jan")
+            on_release: root.close_popup()
         Button: 
             text: "Feb"
+            on_release: root.month_select("Feb")
+            on_release: root.close_popup()
         Button: 
             text: "Mar"
+            on_release: root.month_select("Mar")
+            on_release: root.close_popup()
         Button: 
             text: "Apr"
+            on_release: root.month_select("Apr")
+            on_release: root.close_popup()
         Button: 
             text: "May"
+            on_release: root.month_select("May")
+            on_release: root.close_popup()
         Button: 
             text: "Jun"
         Button: 
@@ -49,6 +59,8 @@ WindowManager:
         cols: 7
         Button: 
             text: "1"
+            on_release: root.day_select("1")
+            on_release: root.close_popup()
         Button: 
             text: "2"
         Button: 
@@ -117,6 +129,8 @@ WindowManager:
         cols: 2
         Button: 
             text: "2024"
+            on_release: root.year_select("2024")
+            on_release: root.close_popup()
         Button: 
             text: "2025"
 
@@ -152,6 +166,7 @@ WindowManager:
             text: "Start time"
         Label:
             text: "End time"
+        
 
         Label: 
             text: "Date"
