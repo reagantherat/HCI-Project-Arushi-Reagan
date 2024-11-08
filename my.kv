@@ -1,14 +1,141 @@
+#:import Factory kivy.factory.Factory
+
+WindowManager:
+    MainWindow:
+    CreateEvent:
+
+<MainWindow>:
+    name: "main"
+    Button: 
+        text: "submit"
+        on_release: 
+            root.manager.transition.direction = "left"
+            root.go_create_event()
+
+<MonthPopup>:
+    GridLayout:
+        size_hint: .9, .9
+        pos_hint: {"x": .1, "y": .1}
+        cols: 3
+        Button: 
+            text: "Jan"
+        Button: 
+            text: "Feb"
+        Button: 
+            text: "Mar"
+        Button: 
+            text: "Apr"
+        Button: 
+            text: "May"
+        Button: 
+            text: "Jun"
+        Button: 
+            text: "Jul"
+        Button: 
+            text: "Aug"
+        Button: 
+            text: "Sep"
+        Button: 
+            text: "Oct"
+        Button: 
+            text: "Nov"
+        Button: 
+            text: "Dec"
+
+<DayPopup>:
+    GridLayout:
+        size_hint: .9, .9
+        pos_hint: {"x": .1, "y": .1}
+        cols: 7
+        Button: 
+            text: "1"
+        Button: 
+            text: "2"
+        Button: 
+            text: "3"
+        Button: 
+            text: "4"
+        Button: 
+            text: "5"
+        Button: 
+            text: "6"
+        Button: 
+            text: "7"
+        Button: 
+            text: "8"
+        Button: 
+            text: "9"
+        Button: 
+            text: "10"
+        Button: 
+            text: "11"
+        Button: 
+            text: "12"
+        Button: 
+            text: "13"
+        Button: 
+            text: "14"
+        Button: 
+            text: "15"
+        Button: 
+            text: "16"
+        Button: 
+            text: "17"
+        Button: 
+            text: "18"
+        Button: 
+            text: "19"
+        Button: 
+            text: "20"
+        Button: 
+            text: "21"
+        Button: 
+            text: "22"
+        Button: 
+            text: "23"
+        Button: 
+            text: "24"
+        Button: 
+            text: "25"
+        Button: 
+            text: "26"
+        Button: 
+            text: "27"
+        Button: 
+            text: "28"
+        Button: 
+            text: "29"
+        Button: 
+            text: "30"
+        Button: 
+            text: "31"
+
+<YearPopup>:
+    GridLayout:
+        size_hint: .9, .9
+        pos_hint: {"x": .1, "y": .1}
+        cols: 2
+        Button: 
+            text: "2024"
+        Button: 
+            text: "2025"
+
 <CreateEvent>
+    name: "create_event"
     GridLayout:
         cols: 1
         size: root.width, root.height
-        
+
         GridLayout:
             cols: 2
+            Button:
+                size_hint: .2, 1
+                text: "<"
+                on_release: 
+                    root.manager.transition.direction = "right"
+                    root.go_back()
             Label:
-                text: "go back"
-            Label:
-                text: "CREATE EVENT"
+                text: "CREATE A NEW EVENT"
         Label:
             text: "Event Name"
         TextInput:
@@ -25,11 +152,28 @@
             text: "Start time"
         Label:
             text: "End time"
+
         Label: 
             text: "Date"
+        GridLayout: 
+            cols: 3
+            Button:
+                id: month_select
+                text: "Month"
+                on_release: root.month_popup()
+            Button:
+                id: day_select
+                text: "Day"
+                on_release: root.day_popup() 
+            Button:
+                id: year_select
+                text: "Year"
+                on_release: root.year_popup()        
+
         Label:
             text: "Description"
         TextInput:
             multiline: True   
         Button:
             text: "Create event"
+            
