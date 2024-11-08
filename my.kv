@@ -12,128 +12,6 @@ WindowManager:
             root.manager.transition.direction = "left"
             root.go_create_event()
 
-<MonthPopup>:
-    GridLayout:
-        size_hint: .9, .9
-        pos_hint: {"x": .1, "y": .1}
-        cols: 3
-        Button: 
-            text: "Jan"
-            on_release: root.month_select("Jan")
-            on_release: root.close_popup()
-        Button: 
-            text: "Feb"
-            on_release: root.month_select("Feb")
-            on_release: root.close_popup()
-        Button: 
-            text: "Mar"
-            on_release: root.month_select("Mar")
-            on_release: root.close_popup()
-        Button: 
-            text: "Apr"
-            on_release: root.month_select("Apr")
-            on_release: root.close_popup()
-        Button: 
-            text: "May"
-            on_release: root.month_select("May")
-            on_release: root.close_popup()
-        Button: 
-            text: "Jun"
-        Button: 
-            text: "Jul"
-        Button: 
-            text: "Aug"
-        Button: 
-            text: "Sep"
-        Button: 
-            text: "Oct"
-        Button: 
-            text: "Nov"
-        Button: 
-            text: "Dec"
-
-<DayPopup>:
-    GridLayout:
-        size_hint: .9, .9
-        pos_hint: {"x": .1, "y": .1}
-        cols: 7
-        Button: 
-            text: "1"
-            on_release: root.day_select("1")
-            on_release: root.close_popup()
-        Button: 
-            text: "2"
-        Button: 
-            text: "3"
-        Button: 
-            text: "4"
-        Button: 
-            text: "5"
-        Button: 
-            text: "6"
-        Button: 
-            text: "7"
-        Button: 
-            text: "8"
-        Button: 
-            text: "9"
-        Button: 
-            text: "10"
-        Button: 
-            text: "11"
-        Button: 
-            text: "12"
-        Button: 
-            text: "13"
-        Button: 
-            text: "14"
-        Button: 
-            text: "15"
-        Button: 
-            text: "16"
-        Button: 
-            text: "17"
-        Button: 
-            text: "18"
-        Button: 
-            text: "19"
-        Button: 
-            text: "20"
-        Button: 
-            text: "21"
-        Button: 
-            text: "22"
-        Button: 
-            text: "23"
-        Button: 
-            text: "24"
-        Button: 
-            text: "25"
-        Button: 
-            text: "26"
-        Button: 
-            text: "27"
-        Button: 
-            text: "28"
-        Button: 
-            text: "29"
-        Button: 
-            text: "30"
-        Button: 
-            text: "31"
-
-<YearPopup>:
-    GridLayout:
-        size_hint: .9, .9
-        pos_hint: {"x": .1, "y": .1}
-        cols: 2
-        Button: 
-            text: "2024"
-            on_release: root.year_select("2024")
-            on_release: root.close_popup()
-        Button: 
-            text: "2025"
-
 <CreateEvent>
     name: "create_event"
     GridLayout:
@@ -164,26 +42,85 @@ WindowManager:
             multiline: False
         Label:
             text: "Start time"
+        GridLayout:
+            size_hint: .5, 1
+            cols: 4
+            Spinner:
+                id: s_hour_select
+                text: "00"
+                values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+                on_text: root.s_hour_clicked(s_hour_select.text)
+            Label:
+                text: ":"
+            Spinner:
+                id: s_minute_select
+                text: "00"
+                values: ["00", "15", "30", "45"]
+                on_text: root.s_minute_clicked(s_minute_select.text)
+            GridLayout:
+                cols: 2
+                Label: 
+                    text: "AM"
+                CheckBox: 
+                    group: "s_am_pm"
+                    on_active: root.am_pm_clicked(self, self.active, "AM")
+                Label: 
+                    text: "PM"
+                CheckBox: 
+                    group: "s_am_pm"
+                    on_active: root.am_pm_clicked(self, self.active, "PM")
         Label:
             text: "End time"
+        GridLayout:
+            size_hint: .5, 1
+            cols: 4
+            Spinner:
+                id: e_hour_select
+                text: "00"
+                values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+                on_text: root.e_hour_clicked(e_hour_select.text)
+            Label:
+                text: ":"
+            Spinner:
+                id: e_minute_select
+                text: "00"
+                values: ["00", "15", "30", "45"]
+                on_text: root.e_minute_clicked(e_minute_select.text)
+            GridLayout:
+                cols: 2
+                Label: 
+                    text: "AM"
+                CheckBox: 
+                    group: "e_am_pm"
+                    on_active: root.am_pm_clicked(self, self.active, "AM")
+                Label: 
+                    text: "PM"
+                CheckBox: 
+                    group: "e_am_pm"
+                    on_active: root.am_pm_clicked(self, self.active, "PM")
+            
         
 
         Label: 
             text: "Date"
         GridLayout: 
             cols: 3
-            Button:
+            Spinner:
                 id: month_select
                 text: "Month"
-                on_release: root.month_popup()
-            Button:
+                values: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                on_text: root.month_clicked(month_select.text)
+            Spinner:
                 id: day_select
                 text: "Day"
-                on_release: root.day_popup() 
-            Button:
+                values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]
+                on_text: root.day_clicked(day_select.text)
+            Spinner:
                 id: year_select
                 text: "Year"
-                on_release: root.year_popup()        
+                values: ["2024", "2025"]
+                on_text: root.year_clicked(year_select.text)
+                
 
         Label:
             text: "Description"
