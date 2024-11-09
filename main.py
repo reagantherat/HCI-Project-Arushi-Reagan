@@ -7,6 +7,8 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.uix.switch import Switch
 from kivy.uix.checkbox import CheckBox 
+from kivy.uix.scrollview import ScrollView
+from kivy.graphics import Rectangle, Color
 
 # Set the window size
 Config.set('graphics', 'width', '400')
@@ -18,6 +20,10 @@ class MainWindow(Screen):
         sm.current = "create_event"
     def go_event_filters(self):
         sm.current = "event_filters"
+    def go_message(self):
+        sm.current = "message"
+    def go_profile(self):
+        sm.current = "profile"
 
 class CreateEvent(Screen):
     def go_back(self):
@@ -71,6 +77,11 @@ class EventFilter(Screen):
         else:
             print("Checkbox Unchecked")
 
+class Message(Screen):
+    def go_back(self):
+        sm.current = "main"
+
+
 
 class WindowManager(ScreenManager):
     pass
@@ -78,7 +89,7 @@ class WindowManager(ScreenManager):
 kv = Builder.load_file("my.kv")
 sm = WindowManager()
 
-screens = [MainWindow(name="main"), CreateEvent(name="create_event"), EventFilter(name="event_filters")]
+screens = [MainWindow(name="main"), CreateEvent(name="create_event"), EventFilter(name="event_filters"), Message(name="message")]
 for screen in screens:
     sm.add_widget(screen)
 

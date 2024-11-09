@@ -342,4 +342,50 @@ WindowManager:
 
         Button:
             text: "Filter Events"
+            on_release: 
+                root.manager.transition.direction = "down"
+                root.go_back()
+
+<Message>
+    name: "message"
+    GridLayout:
+        cols: 1
+        size: root.width, root.height
+
+        GridLayout:
+            cols: 3
+            Button:
+                size_hint: .2, 1
+                text: "<"
+                on_release: 
+                    root.manager.transition.direction = "right"
+                    root.go_back()
+            Label:
+                text: "person's name"
+
+            Button:
+                size_hint: .2, 1
+                text: "!"
+                on_release: 
+                    root.manager.transition.direction = "right"
+                    root.go_back()
+        Button:
+            text: "Go Together"
+        
+        
+        Label:
+            text: " "
+        Label:
+            text: " "
+        Label:
+            text: " "
+        Label:
+            text: " "
+
+        TextInput:
+            multiline: True 
+
+
+            
+            
             
