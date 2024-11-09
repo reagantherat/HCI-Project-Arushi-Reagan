@@ -6,11 +6,38 @@ WindowManager:
 
 <MainWindow>:
     name: "main"
-    Button: 
-        text: "submit"
-        on_release: 
-            root.manager.transition.direction = "left"
-            root.go_create_event()
+    GridLayout:
+        cols: 1
+        size: root.width, root.height
+        Label:
+            text: "Events"
+        Button: 
+            text: "Select Filters v"
+            on_release: 
+                root.manager.transition.direction = "up"
+                root.go_event_filters()
+        Label:
+            text: "Showing Results"
+                
+        GridLayout:
+            cols: 4
+            Button: 
+                text: "Home"
+            Button: 
+                text: "+"
+                on_release: 
+                    root.manager.transition.direction = "left"
+                    root.go_create_event()
+            Button: 
+                text: "Message"
+                on_release: 
+                    root.manager.transition.direction = "left"
+                    root.go_message()
+            Button: 
+                text: "Profile"
+                on_release: 
+                    root.manager.transition.direction = "left"
+                    root.go_profile()
 
 <CreateEvent>
     name: "create_event"
@@ -128,4 +155,191 @@ WindowManager:
             multiline: True   
         Button:
             text: "Create event"
+
+
+<EventFilter>
+    name: "event_filters"
+    GridLayout:
+        cols: 1
+        size: root.width, root.height
+
+        Button:
+            text: "Select Filters ^"
+            on_release: 
+                root.manager.transition.direction = "down"
+                root.go_back()
+        
+        Label:
+            text: "Dates"
+
+        GridLayout:
+            cols: 3
+
+            
+            GridLayout: 
+                cols: 3
+                Spinner:
+                    id: month_select
+                    text: "Month"
+                    values: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                    on_text: root.month_clicked(month_select.text)
+                Spinner:
+                    id: day_select
+                    text: "Day"
+                    values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]
+                    on_text: root.day_clicked(day_select.text)
+                Spinner:
+                    id: year_select
+                    text: "Year"
+                    values: ["2024", "2025"]
+                    on_text: root.year_clicked(year_select.text)
+
+            Label:
+                text: "to"
+            
+            GridLayout: 
+                cols: 3
+                Spinner:
+                    id: month_select
+                    text: "Month"
+                    values: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                    on_text: root.month_clicked(month_select.text)
+                Spinner:
+                    id: day_select
+                    text: "Day"
+                    values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]
+                    on_text: root.day_clicked(day_select.text)
+                Spinner:
+                    id: year_select
+                    text: "Year"
+                    values: ["2024", "2025"]
+                    on_text: root.year_clicked(year_select.text)
+
+        Label:
+            text: "Times"
+        GridLayout:
+            size_hint: .5, 1
+            cols: 4
+            Spinner:
+                id: s_hour_select
+                text: "00"
+                values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+                on_text: root.s_hour_clicked(s_hour_select.text)
+            Label:
+                text: ":"
+            Spinner:
+                id: s_minute_select
+                text: "00"
+                values: ["00", "15", "30", "45"]
+                on_text: root.s_minute_clicked(s_minute_select.text)
+            GridLayout:
+                cols: 2
+                Label: 
+                    text: "AM"
+                CheckBox: 
+                    group: "s_am_pm"
+                    on_active: root.am_pm_clicked(self, self.active, "AM")
+                Label: 
+                    text: "PM"
+                CheckBox: 
+                    group: "s_am_pm"
+                    on_active: root.am_pm_clicked(self, self.active, "PM")
+        
+        GridLayout:
+            size_hint: .5, 1
+            cols: 4
+            Spinner:
+                id: e_hour_select
+                text: "00"
+                values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+                on_text: root.e_hour_clicked(e_hour_select.text)
+            Label:
+                text: ":"
+            Spinner:
+                id: e_minute_select
+                text: "00"
+                values: ["00", "15", "30", "45"]
+                on_text: root.e_minute_clicked(e_minute_select.text)
+            GridLayout:
+                cols: 2
+                Label: 
+                    text: "AM"
+                CheckBox: 
+                    group: "e_am_pm"
+                    on_active: root.am_pm_clicked(self, self.active, "AM")
+                Label: 
+                    text: "PM"
+                CheckBox: 
+                    group: "e_am_pm"
+                    on_active: root.am_pm_clicked(self, self.active, "PM")
+                 
+
+        Label:
+            text: "Popularity"
+        Switch:
+            active: True
+            on_active: root.switch_callback(self, self.active)
+
+        Label:
+            text: "Types"  
+
+        GridLayout:
+            cols: 2
+
+            Label:
+                text: "Athletics" 
+
+            CheckBox:
+                on_active: root.checkbox_click(self, self.active)
+                size_hint_x: .20
+        GridLayout:
+            cols: 2
+
+            Label:
+                text: "Shows" 
+
+            CheckBox:
+                on_active: root.checkbox_click(self, self.active)
+                size_hint_x: .20
+        GridLayout:
+            cols: 2
+
+            Label:
+                text: "Workshops" 
+
+            CheckBox:
+                on_active: root.checkbox_click(self, self.active)
+                size_hint_x: .20
+        GridLayout:
+            cols: 2
+
+            Label:
+                text: "Social" 
+
+            CheckBox:
+                on_active: root.checkbox_click(self, self.active)
+                size_hint_x: .20
+
+        GridLayout:
+            cols: 2
+
+            Label:
+                text: "Clubs" 
+
+            CheckBox:
+                on_active: root.checkbox_click(self, self.active)
+                size_hint_x: .20
+
+        GridLayout:
+            cols: 2
+
+            Label:
+                text: "Academic/Professional" 
+
+            CheckBox:
+                on_active: root.checkbox_click(self, self.active)
+                size_hint_x: .20
+
+        Button:
+            text: "Filter Events"
             
