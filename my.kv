@@ -5,39 +5,47 @@ WindowManager:
     CreateEvent:
 
 <MainWindow>:
-    name: "main"
-    GridLayout:
-        cols: 1
+    ScrollView:
+        size_hint: 1, None
         size: root.width, root.height
-        Label:
-            text: "Events"
-        Button: 
-            text: "Select Filters v"
-            on_release: 
-                root.manager.transition.direction = "up"
-                root.go_event_filters()
-        Label:
-            text: "Showing Results"
-                
+        name: "main"
         GridLayout:
-            cols: 4
+            cols: 1
+            size: root.width, root.height
+            Label:
+                size_hint: 1, .1
+                text: "EVENTS"
             Button: 
-                text: "Home"
-            Button: 
-                text: "+"
+                size_hint: 1, .1
+                text: "Select Filters v"
                 on_release: 
-                    root.manager.transition.direction = "left"
-                    root.go_create_event()
-            Button: 
-                text: "Message"
-                on_release: 
-                    root.manager.transition.direction = "left"
-                    root.go_message()
-            Button: 
-                text: "Profile"
-                on_release: 
-                    root.manager.transition.direction = "left"
-                    root.go_profile()
+                    root.manager.transition.direction = "up"
+                    root.go_event_filters()
+            Label:
+                size_hint: 1, .1
+                text: "Showing Results"
+            Label:
+                text: "all events here"
+            GridLayout:
+                cols: 4
+                size_hint: 1, .2
+                Button: 
+                    text: "Home"
+                Button: 
+                    text: "+"
+                    on_release: 
+                        root.manager.transition.direction = "left"
+                        root.go_create_event()
+                Button: 
+                    text: "Message"
+                    on_release: 
+                        root.manager.transition.direction = "left"
+                        root.go_message()
+                Button: 
+                    text: "Profile"
+                    on_release: 
+                        root.manager.transition.direction = "left"
+                        root.go_profile()
 
 <CreateEvent>
     name: "create_event"
@@ -91,11 +99,13 @@ WindowManager:
                 CheckBox: 
                     group: "s_am_pm"
                     on_active: root.am_pm_clicked(self, self.active, "AM")
+                    color: (255, 255, 255, 1)
                 Label: 
                     text: "PM"
                 CheckBox: 
                     group: "s_am_pm"
                     on_active: root.am_pm_clicked(self, self.active, "PM")
+                    color: (255, 255, 255, 1)
         Label:
             text: "End time"
         GridLayout:
@@ -106,6 +116,7 @@ WindowManager:
                 text: "00"
                 values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
                 on_text: root.e_hour_clicked(e_hour_select.text)
+                
             Label:
                 text: ":"
             Spinner:
@@ -120,11 +131,13 @@ WindowManager:
                 CheckBox: 
                     group: "e_am_pm"
                     on_active: root.am_pm_clicked(self, self.active, "AM")
+                    color: (255, 255, 255, 1)
                 Label: 
                     text: "PM"
                 CheckBox: 
                     group: "e_am_pm"
                     on_active: root.am_pm_clicked(self, self.active, "PM")
+                    color: (255, 255, 255, 1)
             
         
 
