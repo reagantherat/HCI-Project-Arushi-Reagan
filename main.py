@@ -8,7 +8,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.switch import Switch
 from kivy.uix.checkbox import CheckBox 
 from kivy.uix.scrollview import ScrollView
-from kivy.graphics import Rectangle, Color
+from kivy.uix.label import Label
 
 # Set the window size
 Config.set('graphics', 'width', '400')
@@ -80,6 +80,28 @@ class EventFilter(Screen):
 class Message(Screen):
     def go_back(self):
         sm.current = "main"
+
+    def __init__(self, **kwargs):
+        super(Message, self).__init__(**kwargs)
+
+    def addthelabel(self):
+        # Retrieve text from the TextInput
+        text = self.ids.message_input.text.strip()  # Gets and removes extra spaces
+
+        # Only add a label if there is text entered
+        if text:
+            # Create a new label with the text from the TextInput
+            new_label = Label(text=text, size_hint_y=None, height="40dp")
+            
+            # Add the label to the layout inside the ScrollView
+            self.ids.layout.add_widget(new_label)
+
+            # Clear the TextInput field after adding the label
+            self.ids.message_input.text = ""
+            
+            # Scroll to the bottom of the ScrollView to show the latest message
+            self.ids.scroll_view.scroll_to(new_label)
+
 
 
 
