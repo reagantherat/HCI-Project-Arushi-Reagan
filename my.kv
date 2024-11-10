@@ -4,23 +4,39 @@ WindowManager:
     MainWindow:
     CreateEvent:
 
+<EventScroll>:
+    viewclass: "Button"
+    RecycleBoxLayout:
+        default_size: None, 100
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical'
+
 <MainWindow>:
+    size_hint: 1, None
+    size: root.width, root.height
     name: "main"
     GridLayout:
         cols: 1
         size: root.width, root.height
         Label:
-            text: "Events"
+            size_hint: 1, .1
+            text: "EVENTS"
         Button: 
+            size_hint: 1, .1
             text: "Select Filters v"
             on_release: 
                 root.manager.transition.direction = "up"
                 root.go_event_filters()
         Label:
+            size_hint: 1, .1
             text: "Showing Results"
-                
+        EventScroll:
+            size_hint: 1, .5
         GridLayout:
             cols: 4
+            size_hint: 1, .2
             Button: 
                 text: "Home"
             Button: 
@@ -91,11 +107,13 @@ WindowManager:
                 CheckBox: 
                     group: "s_am_pm"
                     on_active: root.am_pm_clicked(self, self.active, "AM")
+                    color: (255, 255, 255, 1)
                 Label: 
                     text: "PM"
                 CheckBox: 
                     group: "s_am_pm"
                     on_active: root.am_pm_clicked(self, self.active, "PM")
+                    color: (255, 255, 255, 1)
         Label:
             text: "End time"
         GridLayout:
@@ -106,6 +124,7 @@ WindowManager:
                 text: "00"
                 values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
                 on_text: root.e_hour_clicked(e_hour_select.text)
+                
             Label:
                 text: ":"
             Spinner:
@@ -120,11 +139,13 @@ WindowManager:
                 CheckBox: 
                     group: "e_am_pm"
                     on_active: root.am_pm_clicked(self, self.active, "AM")
+                    color: (255, 255, 255, 1)
                 Label: 
                     text: "PM"
                 CheckBox: 
                     group: "e_am_pm"
                     on_active: root.am_pm_clicked(self, self.active, "PM")
+                    color: (255, 255, 255, 1)
             
         
 

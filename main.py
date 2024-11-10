@@ -9,6 +9,7 @@ from kivy.uix.switch import Switch
 from kivy.uix.checkbox import CheckBox 
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.label import Label
+from kivy.uix.recycleview import RecycleView
 
 # Set the window size
 Config.set('graphics', 'width', '400')
@@ -103,10 +104,21 @@ class Message(Screen):
             self.ids.scroll_view.scroll_to(new_label)
 
 
-
-
 class WindowManager(ScreenManager):
     pass
+
+class EventScroll(RecycleView):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        content = []
+        my_file = open("eventdb.txt", "r")
+        content_read = my_file.read()
+        content = content_read.split("\n")
+        my_file.close()
+        for i in range(len(content)):
+            content[i] = content[i].replace("|", "\n")
+         
+        self.data = [{'text': item} for item in content]
 
 kv = Builder.load_file("my.kv")
 sm = WindowManager()
