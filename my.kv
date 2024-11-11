@@ -517,7 +517,18 @@ WindowManager:
             on_release: root.go_back()
 
 
+<Profile>:
+    GridLayout:
+        cols: 1
+        Label:
+            text: "This is the profile screen"
+        Button:
+            text: "Go to Main"
+            on_release: 
+                root.manager.transition.direction = "right"
+                root.go_back()
 
+            
             
             
             
