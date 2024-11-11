@@ -103,6 +103,18 @@ class Message(Screen):
             # Scroll to the bottom of the ScrollView to show the latest message
             self.ids.scroll_view.scroll_to(new_label)
 
+class Event(Screen):
+    def go_back(self):
+        self.manager.current = "main"
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def set_selected_item(self, selected_item):
+        # Update the label with the selected item's text
+        self.ids.event_label.text = selected_item.replace("|", "\n")
+    
+
 
 class WindowManager(ScreenManager):
     pass
@@ -110,8 +122,29 @@ class WindowManager(ScreenManager):
 class EventScroll(RecycleView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        
+        # Read file content
+        with open("eventdb.txt", "r") as my_file:
+            content = my_file.read().split("\n")
+        
+        # Clean up the content
+        for i in range(len(content)):
+            content[i] = content[i].replace("|", "\n")
+        
+        # Populate data for RecycleView with an on_release event to open the event screen
+        self.data = [{'text': item, 'on_release': lambda text=item: self.open_event_screen(text)} for item in content]
+
+    def open_event_screen(self, selected_item_text):
+        # Get the event screen and set the selected item text
+        event_screen = self.parent.parent.manager.get_screen("event")  # Ensure this points correctly to the screen manager
+        event_screen.set_selected_item(selected_item_text)
+        self.parent.parent.manager.current = "event"  # Switch to the event screen
+
+class PeopleScroll(RecycleView):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         content = []
-        my_file = open("eventdb.txt", "r")
+        my_file = open("peopledb.txt", "r")
         content_read = my_file.read()
         content = content_read.split("\n")
         my_file.close()
@@ -123,7 +156,7 @@ class EventScroll(RecycleView):
 kv = Builder.load_file("my.kv")
 sm = WindowManager()
 
-screens = [MainWindow(name="main"), CreateEvent(name="create_event"), EventFilter(name="event_filters"), Message(name="message")]
+screens = [MainWindow(name="main"), CreateEvent(name="create_event"), EventFilter(name="event_filters"), Message(name="message"), Event(name="event")]
 for screen in screens:
     sm.add_widget(screen)
 

@@ -13,6 +13,15 @@ WindowManager:
         height: self.minimum_height
         orientation: 'vertical'
 
+<PeopleScroll>:
+    viewclass: "Button"
+    RecycleBoxLayout:
+        default_size: None, 100
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical'
+
 <MainWindow>:
     size_hint: 1, None
     size: root.width, root.height
@@ -496,6 +505,21 @@ WindowManager:
         Button:
             text: 'No'
             on_release: root.dismiss()
+
+
+<Event>
+    name: "event"
+    BoxLayout:
+        orientation: "vertical"
+        
+        Label:
+            id: event_label  # Assigning id to reference it in Python code
+            text: "Event details will appear here."
+        
+        Button:
+            text: "Go Back"
+            on_release: root.go_back()
+
 
 
             
