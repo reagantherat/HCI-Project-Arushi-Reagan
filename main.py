@@ -27,25 +27,54 @@ class MainWindow(Screen):
         sm.current = "profile"
 
 class CreateEvent(Screen):
+    def __init__(self,  **kwargs):
+        super().__init__( **kwargs)
+        self.data = [""] * 15
+        self.data[3] = '0'
+        self.data[4] = '0'
+        self.data[6] = '0'
+        self.data[7] = '0'
+        self.data[14] = '1'
+
+    # Name | Organizer | Location | Start Hour : Start Minute AM/PM - End Hour : End Minute AM/PM | Month Day, Year | Description | Tags | Num People
+    def on_submit(self):
+        self.data[0] = (self.ids.event_name.text)
+        self.data[1] = (self.ids.event_organizer.text)
+        self.data[2] = (self.ids.event_location.text)
+        self.data[3] = (self.ids.s_hour_select.text)
+        self.data[4] = (self.ids.s_minute_select.text)
+        self.data[6] = (self.ids.e_hour_select.text)
+        self.data[7] = (self.ids.e_minute_select.text)
+        self.data[9] = (self.ids.month_select.text)
+        self.data[10] = (self.ids.day_select.text)
+        self.data[11] = (self.ids.year_select.text)
+        self.data[12] = (self.ids.description.text)
+        self.data[13] = ""
+        self.data[14] = "1"
+
+        print(self.data)
+
+        # write data to "database"
+        f = open('eventdb.txt', 'a')
+        to_add = "\n" + self.data[0] + " | " + self.data[1] + " | " + self.data[2] + " | " + self.data[3] + ":" + self.data[4] + " " + self.data[5] + " - " + self.data[6] + ":" + self.data[7] + " " + self.data[8] + " | " + self.data[9] + " " + self.data[10] + ", " + self.data[11] + " | " + self.data[12] + " | " + self.data[13] + " | " + self.data[14]
+        print(to_add)
+        f.write(to_add)
+        f.close()
+
+        #return to main page
+        sm.current = "main"
+   
     def go_back(self):
         sm.current = "main"
-    def month_clicked(self, val):
-        print("month: " + val)
-    def day_clicked(self, val):
-        print("day: " + val)
-    def year_clicked(self, val):
-        print("year: " + val)
-    def s_hour_clicked(self, val):
-        print("s hour: " + val)
-    def s_minute_clicked(self, val):
-        print("s minute: " + val)
-    def e_hour_clicked(self, val):
-        print("e hour: " + val)
-    def e_minute_clicked(self, val):
-        print("e minute: " + val)
-    def am_pm_clicked(self, instance, val, am_pm):
+    def s_am_pm_clicked(self, instance, val, am_pm):
         if (val):
-            print(am_pm)
+            self.data[5] = am_pm
+    def e_am_pm_clicked(self, instance, val, am_pm):
+        if (val):
+            self.data[8] = am_pm
+            print(self.data)
+    
+        
 
 class EventFilter(Screen):
     def go_back(self):
@@ -103,6 +132,9 @@ class Message(Screen):
             # Scroll to the bottom of the ScrollView to show the latest message
             self.ids.scroll_view.scroll_to(new_label)
 
+class Profile(Screen):
+    def go_back(self):
+        sm.current = "main"
 class Event(Screen):
     def go_back(self):
         self.manager.current = "main"
@@ -153,10 +185,11 @@ class PeopleScroll(RecycleView):
          
         self.data = [{'text': item} for item in content]
 
+
 kv = Builder.load_file("my.kv")
 sm = WindowManager()
 
-screens = [MainWindow(name="main"), CreateEvent(name="create_event"), EventFilter(name="event_filters"), Message(name="message"), Event(name="event")]
+screens = [MainWindow(name="main"), CreateEvent(name="create_event"), EventFilter(name="event_filters"), Message(name="message"), Profile(name="profile"), Event(name="event")]
 for screen in screens:
     sm.add_widget(screen)
 
