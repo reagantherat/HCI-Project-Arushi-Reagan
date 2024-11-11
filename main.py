@@ -3,11 +3,6 @@ from kivy.app import App
 from kivy.config import Config
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.popup import Popup
-from kivy.uix.switch import Switch
-from kivy.uix.checkbox import CheckBox 
-from kivy.uix.scrollview import ScrollView
 from kivy.uix.label import Label
 from kivy.uix.recycleview import RecycleView
 
@@ -72,9 +67,7 @@ class CreateEvent(Screen):
     def e_am_pm_clicked(self, instance, val, am_pm):
         if (val):
             self.data[8] = am_pm
-            print(self.data)
-    
-        
+            print(self.data)     
 
 class EventFilter(Screen):
     def go_back(self):
@@ -135,6 +128,7 @@ class Message(Screen):
 class Profile(Screen):
     def go_back(self):
         sm.current = "main"
+
 class Event(Screen):
     def go_back(self):
         self.manager.current = "main"
@@ -146,8 +140,6 @@ class Event(Screen):
         # Update the label with the selected item's text
         self.ids.event_label.text = selected_item.replace("|", "\n")
     
-
-
 class WindowManager(ScreenManager):
     pass
 
@@ -164,7 +156,7 @@ class EventScroll(RecycleView):
             content[i] = content[i].replace("|", "\n")
         
         # Populate data for RecycleView with an on_release event to open the event screen
-        self.data = [{'text': item, 'on_release': lambda text=item: self.open_event_screen(text)} for item in content]
+        self.data = [{'text': item, 'on_release': lambda text=item: self.open_event_screen(text), "text_size": {self.width, None}, "halign": 'left', "valign": 'top'} for item in content]
 
     def open_event_screen(self, selected_item_text):
         # Get the event screen and set the selected item text
