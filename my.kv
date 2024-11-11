@@ -23,6 +23,7 @@ WindowManager:
         orientation: 'vertical'
 
 <MainWindow>:
+    size_hint: 1, None
     size: root.width, root.height
     name: "main"
     GridLayout:
@@ -41,6 +42,7 @@ WindowManager:
             size_hint: 1, .1
             text: "Showing Results"
         EventScroll:
+            size_hint: 1, .5
         GridLayout:
             cols: 4
             size_hint: 1, .2
@@ -81,17 +83,14 @@ WindowManager:
         Label:
             text: "Event Name"
         TextInput:
-            id: event_name
             multiline: False
         Label:
             text: "Event Organizer"
         TextInput:
-            id: event_organizer
             multiline: False
         Label:
             text: "Event Location"
         TextInput:
-            id: event_location
             multiline: False
         Label:
             text: "Start time"
@@ -102,25 +101,27 @@ WindowManager:
                 id: s_hour_select
                 text: "00"
                 values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+                on_text: root.s_hour_clicked(s_hour_select.text)
             Label:
                 text: ":"
             Spinner:
                 id: s_minute_select
                 text: "00"
                 values: ["00", "15", "30", "45"]
+                on_text: root.s_minute_clicked(s_minute_select.text)
             GridLayout:
                 cols: 2
                 Label: 
                     text: "AM"
                 CheckBox: 
                     group: "s_am_pm"
-                    on_active: root.s_am_pm_clicked(self, self.active, "AM")
+                    on_active: root.am_pm_clicked(self, self.active, "AM")
                     color: (255, 255, 255, 1)
                 Label: 
                     text: "PM"
                 CheckBox: 
                     group: "s_am_pm"
-                    on_active: root.s_am_pm_clicked(self, self.active, "PM")
+                    on_active: root.am_pm_clicked(self, self.active, "PM")
                     color: (255, 255, 255, 1)
         Label:
             text: "End time"
@@ -131,6 +132,7 @@ WindowManager:
                 id: e_hour_select
                 text: "00"
                 values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+                on_text: root.e_hour_clicked(e_hour_select.text)
                 
             Label:
                 text: ":"
@@ -138,19 +140,20 @@ WindowManager:
                 id: e_minute_select
                 text: "00"
                 values: ["00", "15", "30", "45"]
+                on_text: root.e_minute_clicked(e_minute_select.text)
             GridLayout:
                 cols: 2
                 Label: 
                     text: "AM"
                 CheckBox: 
                     group: "e_am_pm"
-                    on_active: root.e_am_pm_clicked(self, self.active, "AM")
+                    on_active: root.am_pm_clicked(self, self.active, "AM")
                     color: (255, 255, 255, 1)
                 Label: 
                     text: "PM"
                 CheckBox: 
                     group: "e_am_pm"
-                    on_active: root.e_am_pm_clicked(self, self.active, "PM")
+                    on_active: root.am_pm_clicked(self, self.active, "PM")
                     color: (255, 255, 255, 1)
             
         
@@ -163,24 +166,25 @@ WindowManager:
                 id: month_select
                 text: "Month"
                 values: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                on_text: root.month_clicked(month_select.text)
             Spinner:
                 id: day_select
                 text: "Day"
                 values: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]
+                on_text: root.day_clicked(day_select.text)
             Spinner:
                 id: year_select
                 text: "Year"
                 values: ["2024", "2025"]
+                on_text: root.year_clicked(year_select.text)
                 
 
         Label:
             text: "Description"
         TextInput:
-            id: description
             multiline: True   
         Button:
             text: "Create event"
-            on_release: root.on_submit()
 
 
 <EventFilter>
@@ -518,31 +522,6 @@ WindowManager:
 
 
 
-<Event>
-    name: "event"
-    BoxLayout:
-        orientation: "vertical"
-        
-        Label:
-            id: event_label  # Assigning id to reference it in Python code
-            text: "Event details will appear here."
-        
-        Button:
-            text: "Go Back"
-            on_release: root.go_back()
-
-
-
-<Profile>:
-    GridLayout:
-        cols: 1
-        Label:
-            text: "This is the profile screen"
-        Button:
-            text: "Go to Main"
-            on_release: 
-                root.manager.transition.direction = "right"
-                root.go_back()
-
+            
             
             
