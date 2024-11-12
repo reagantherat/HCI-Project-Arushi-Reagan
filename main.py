@@ -51,7 +51,7 @@ class CreateEvent(Screen):
 
         # write data to "database"
         f = open('eventdb.txt', 'a')
-        to_add = "\n" + self.data[0] + " | " + self.data[1] + " | " + self.data[2] + " | " + self.data[3] + ":" + self.data[4] + " " + self.data[5] + " - " + self.data[6] + ":" + self.data[7] + " " + self.data[8] + " | " + self.data[9] + " " + self.data[10] + ", " + self.data[11] + " | " + self.data[12] + " | " + self.data[13] + " | " + self.data[14]
+        to_add = "\n" + self.data[0] + " | " + self.data[1] +  " | " + self.data[3] + ":" + self.data[4] + " " + self.data[5] + " - " + self.data[6] + ":" + self.data[7] + " " + self.data[8] + " | " + self.data[9] + " " + self.data[10] + ", " + self.data[11] + " | " + self.data[2] + " | " + self.data[12] + " | " + self.data[13] + " | " + self.data[14]
         print(to_add)
         f.write(to_add)
         f.close()
@@ -153,10 +153,13 @@ class EventScroll(RecycleView):
         
         # Clean up the content
         for i in range(len(content)):
+            content[i] = content[i].replace("|", "---", 1)
+            content[i] = content[i].replace("|", "\n", 1)
+            content[i] = content[i].replace("|", "---", 1)
             content[i] = content[i].replace("|", "\n")
         
         # Populate data for RecycleView with an on_release event to open the event screen
-        self.data = [{'text': item, 'on_release': lambda text=item: self.open_event_screen(text), "text_size": {self.width, None}, "halign": 'left', "valign": 'top'} for item in content]
+        self.data = [{'text': item, 'on_release': lambda text=item: self.open_event_screen(text), "text_size": {self.width, None}, "halign": 'center', "valign": 'top'} for item in content]
 
     def open_event_screen(self, selected_item_text):
         # Get the event screen and set the selected item text

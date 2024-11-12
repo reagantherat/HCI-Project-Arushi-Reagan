@@ -42,10 +42,9 @@ WindowManager:
             size_hint: 1, .1
             text: "Showing Results"
         EventScroll:
-            size_hint: 1, .5
         GridLayout:
             cols: 4
-            size_hint: 1, .2
+            size_hint: 1, .1
             Button: 
                 text: "Home"
             Button: 
@@ -116,13 +115,13 @@ WindowManager:
                     text: "AM"
                 CheckBox: 
                     group: "s_am_pm"
-                    on_active: root.am_pm_clicked(self, self.active, "AM")
+                    on_active: root.s_am_pm_clicked(self, self.active, "AM")
                     color: (255, 255, 255, 1)
                 Label: 
                     text: "PM"
                 CheckBox: 
                     group: "s_am_pm"
-                    on_active: root.am_pm_clicked(self, self.active, "PM")
+                    on_active: root.s_am_pm_clicked(self, self.active, "PM")
                     color: (255, 255, 255, 1)
         Label:
             text: "End time"
@@ -146,17 +145,15 @@ WindowManager:
                     text: "AM"
                 CheckBox: 
                     group: "e_am_pm"
-                    on_active: root.am_pm_clicked(self, self.active, "AM")
+                    on_active: root.e_am_pm_clicked(self, self.active, "AM")
                     color: (255, 255, 255, 1)
                 Label: 
                     text: "PM"
                 CheckBox: 
                     group: "e_am_pm"
-                    on_active: root.am_pm_clicked(self, self.active, "PM")
+                    on_active: root.e_am_pm_clicked(self, self.active, "PM")
                     color: (255, 255, 255, 1)
             
-        
-
         Label: 
             text: "Date"
         GridLayout: 
@@ -174,7 +171,6 @@ WindowManager:
                 text: "Year"
                 values: ["2024", "2025"]
                 
-
         Label:
             text: "Description"
         TextInput:
@@ -182,6 +178,7 @@ WindowManager:
             multiline: True   
         Button:
             text: "Create event"
+            on_release: root.on_submit()
 
 
 <EventFilter>
