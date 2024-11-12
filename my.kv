@@ -13,6 +13,7 @@ WindowManager:
         size_hint_y: None
         height: self.minimum_height
         orientation: 'vertical'
+        
 
 <PeopleScroll>:
     viewclass: "Button"
@@ -178,8 +179,9 @@ WindowManager:
             multiline: True   
         Button:
             text: "Create event"
-            on_release: root.on_submit()
-
+            on_release: 
+                root.manager.transition.direction = "right"
+                root.on_submit()
 
 <EventFilter>
     name: "event_filters"
@@ -509,10 +511,13 @@ WindowManager:
         Label:
             id: event_label  # Assigning id to reference it in Python code
             text: "Event details will appear here."
+            text_size: self.width, None
         
         Button:
             text: "Go Back"
-            on_release: root.go_back()
+            on_release: 
+                root.manager.transition.direction = "right"
+                root.go_back()
 
 
 <Profile>:

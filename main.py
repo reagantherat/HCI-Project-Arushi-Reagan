@@ -55,7 +55,7 @@ class CreateEvent(Screen):
         print(to_add)
         f.write(to_add)
         f.close()
-
+        self.clear_inputs()
         #return to main page
         sm.current = "main"
    
@@ -67,7 +67,20 @@ class CreateEvent(Screen):
     def e_am_pm_clicked(self, instance, val, am_pm):
         if (val):
             self.data[8] = am_pm
-            print(self.data)     
+            print(self.data)  
+    def clear_inputs(self):
+        self.ids.event_name.text = ""
+        self.ids.event_organizer.text = ""
+        self.ids.event_location.text = ""
+        self.ids.s_hour_select.text = ""
+        self.ids.s_minute_select.text = ""
+        self.ids.e_hour_select.text = ""
+        self.ids.e_minute_select.text = ""
+        self.ids.month_select.text = ""
+        self.ids.day_select.text = ""
+        self.ids.year_select.text = ""
+        self.ids.description.text = ""
+
 
 class EventFilter(Screen):
     def go_back(self):
