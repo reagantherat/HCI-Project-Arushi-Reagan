@@ -12,6 +12,23 @@ Config.set('graphics', 'height', '720')
 
 # NAVIGATION
 class MainWindow(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.data = []
+        # Read database file content
+        with open("eventdb.txt", "r") as my_file:
+            content = my_file.read().split("\n")
+        
+        # Clean up the content
+        for i in range(len(content)):
+            content[i] = content[i].replace("|", "---", 1)
+            content[i] = content[i].replace("|", "\n", 1)
+            content[i] = content[i].replace("|", "---", 1)
+            content[i] = content[i].replace("|", "\n")
+
+        # Populate data for RecycleView with an on_release event to open the event screen
+        self.data =  [{'text': item, 'on_release': lambda text=item: self.open_event_screen(text), "text_size": {self.width, None}, "halign": 'left', "valign": 'top'} for item in content]
+
     def go_create_event(self):
         sm.current = "create_event"
     def go_event_filters(self):
@@ -20,6 +37,23 @@ class MainWindow(Screen):
         sm.current = "message"
     def go_profile(self):
         sm.current = "profile"
+    def open_event_screen(self, selected_item_text):
+        # Get the event screen and set the selected item text
+        event_screen = sm.get_screen("event")  # Ensure this points correctly to the screen manager
+        event_screen.set_selected_item(selected_item_text)
+        sm.current = "event"  # Switch to the event screen
+
+    def refresh_event_scroll(self):
+        self.ids.event_scroll.data = self.data
+        self.ids.event_scroll.refresh_from_data()
+
+    def test(self, new_event):
+        new_event = new_event.replace("|", "---", 1)
+        new_event = new_event.replace("|", "\n", 1)
+        new_event = new_event.replace("|", "---", 1)
+        new_event = new_event.replace("|", "\n")
+
+        self.data.append({'text': new_event, 'on_release': lambda text=new_event: self.open_event_screen(text), "text_size": {self.width, None}, "halign": 'left', "valign": 'top'})
 
 class CreateEvent(Screen):
     def __init__(self,  **kwargs):
@@ -59,6 +93,7 @@ class CreateEvent(Screen):
             self.clear_inputs()
 
             #return to main page
+            sm.get_screen("main").test(to_add)
             sm.current = "main"
     
     def go_back(self):
@@ -162,30 +197,6 @@ class Event(Screen):
     
 class WindowManager(ScreenManager):
     pass
-
-class EventScroll(RecycleView):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        
-        # Read file content
-        with open("eventdb.txt", "r") as my_file:
-            content = my_file.read().split("\n")
-        
-        # Clean up the content
-        for i in range(len(content)):
-            content[i] = content[i].replace("|", "---", 1)
-            content[i] = content[i].replace("|", "\n", 1)
-            content[i] = content[i].replace("|", "---", 1)
-            content[i] = content[i].replace("|", "\n")
-        
-        # Populate data for RecycleView with an on_release event to open the event screen
-        self.data = [{'text': item, 'on_release': lambda text=item: self.open_event_screen(text), "text_size": {self.width, None}, "halign": 'center', "valign": 'top'} for item in content]
-
-    def open_event_screen(self, selected_item_text):
-        # Get the event screen and set the selected item text
-        event_screen = self.parent.parent.manager.get_screen("event")  # Ensure this points correctly to the screen manager
-        event_screen.set_selected_item(selected_item_text)
-        self.parent.parent.manager.current = "event"  # Switch to the event screen
 
 class PeopleScroll(RecycleView):
     def __init__(self, **kwargs):

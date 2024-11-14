@@ -4,17 +4,6 @@ WindowManager:
     MainWindow:
     CreateEvent:
 
-<EventScroll>:
-    viewclass: "Button"
-    RecycleBoxLayout:
-        spacing: 30
-        #default_size: None, 100
-        default_size_hint: 1, None
-        size_hint_y: None
-        height: self.minimum_height
-        orientation: 'vertical'
-        
-
 <PeopleScroll>:
     viewclass: "Button"
     RecycleBoxLayout:
@@ -25,6 +14,7 @@ WindowManager:
         orientation: 'vertical'
 
 <MainWindow>:
+    on_pre_enter: self.refresh_event_scroll()
     size: root.width, root.height
     name: "main"
     GridLayout:
@@ -42,7 +32,16 @@ WindowManager:
         Label:
             size_hint: 1, .1
             text: "Showing Results"
-        EventScroll:
+        RecycleView:
+            viewclass: "Button"
+            id: event_scroll
+            RecycleBoxLayout:
+                spacing: 30
+                #default_size: None, 100
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
         GridLayout:
             cols: 4
             size_hint: 1, .1
