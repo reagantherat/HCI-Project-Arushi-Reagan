@@ -43,16 +43,24 @@ class CreateEvent(Screen):
         self.data[13] = self.cats
         self.data[14] = "1"
 
-        # write data to "database"
-        f = open('eventdb.txt', 'a')
-        to_add = "\n" + self.data[0] + " | " + self.data[1] +  " | " + self.data[3] + ":" + self.data[4] + " " + self.data[5] + " - " + self.data[6] + ":" + self.data[7] + " " + self.data[8] + " | " + self.data[9] + " " + self.data[10] + ", " + self.data[11] + " | " + self.data[2] + " | " + self.data[12] + " |" + self.data[13] + " | " + self.data[14]
-        print(to_add)
-        f.write(to_add)
-        f.close()
-        self.clear_inputs()
-        #return to main page
-        sm.current = "main"
-   
+        self.allow_submit()
+
+    def allow_submit(self):
+        self.ids.error.text = ""
+        for i in self.data:
+            if i == "":
+                self.ids.error.text = "All fields are required"
+        if self.ids.error.text == "":
+            # write data to "database"
+            f = open('eventdb.txt', 'a')
+            to_add = "\n" + self.data[0] + " | " + self.data[1] +  " | " + self.data[3] + ":" + self.data[4] + " " + self.data[5] + " - " + self.data[6] + ":" + self.data[7] + " " + self.data[8] + " | " + self.data[9] + " " + self.data[10] + ", " + self.data[11] + " | " + self.data[2] + " | " + self.data[12] + " |" + self.data[13] + " | " + self.data[14]
+            f.write(to_add)
+            f.close()
+            self.clear_inputs()
+
+            #return to main page
+            sm.current = "main"
+    
     def go_back(self):
         sm.current = "main"
     def s_am_pm_clicked(self, instance, val, am_pm):
