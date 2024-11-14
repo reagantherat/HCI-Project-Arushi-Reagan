@@ -7,6 +7,8 @@ from kivy.uix.label import Label
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.popup import Popup
+from kivy.uix.scrollview import ScrollView
 
 # Set the window size
 Config.set('graphics', 'width', '400')
@@ -202,6 +204,7 @@ class Event(Screen):
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.attendees_popup = None
 
     def set_selected_item(self, selected_item):
         # Update the label with the selected item's text
@@ -209,37 +212,54 @@ class Event(Screen):
 
     def open_attendees_popup(self):
         # Create and open the AttendeesPopup
-        attendees_popup = AttendeesPopup()
+        self.attendees_popup = AttendeesPopup()
 
         # Create the PeopleScroll instance
         people_scroll = PeopleScroll()
 
         layout = BoxLayout(orientation='vertical')
 
+        button1 = Button(text="< Go back", size_hint_y=None, height=90, size_hint_x=None, width=200)
+        button1.bind(on_release=self.close_popup)  # Bind the button to the 'add_to_list' method
+        layout.add_widget(button1)
+
         # Bind the attendees_popup reference to the PeopleScroll instance
-        people_scroll.attendees_popup = attendees_popup
+        people_scroll.attendees_popup = self.attendees_popup
+        self.attendees_popup.people_scroll = people_scroll
 
         scroll_view = ScrollView()
         scroll_view.add_widget(people_scroll)
 
         layout.add_widget(scroll_view)
 
-        button1 = Button(text="Can't find anyone? Add yourself to the list!")
-        button1.bind(on_release=self.add_to_list)  # Bind the button to the 'add_to_list' method
-        layout.add_widget(button1)
+        button2 = Button(text="Can't find anyone? Add yourself to the list!", size_hint_y=None, height=90)
+        button2.bind(on_release=self.add_to_list)  # Bind the button to the 'add_to_list' method
+        layout.add_widget(button2)
         
         
 
         
         # Set the PeopleScroll as the content of the AttendeesPopup
-        attendees_popup.content = layout
+        self.attendees_popup.content = layout
 
         # Open the popup
-        attendees_popup.open()
+        self.attendees_popup.open()
 
     def add_to_list(self, instance):
-        # Custom button logic here
-        print("Custom button clicked!")
+        f = open('peopledb.txt', 'a')
+        to_add = "\n" + "You have added yourself to this list!"
+        f.write(to_add)
+        f.close()
+
+        if self.attendees_popup and self.attendees_popup.people_scroll:
+            self.attendees_popup.people_scroll.populate_yourself(to_add)
+
+
+    def close_popup(self, instance):
+        if self.attendees_popup:
+            self.attendees_popup.dismiss()  # Dismiss the popup
+            self.attendees_popup = None
+
     
 class WindowManager(ScreenManager):
     pass
@@ -257,6 +277,10 @@ class PeopleScroll(RecycleView):
             content[i] = content[i].replace("|", "\n")
          
         self.data = [{'text': item, 'on_release': lambda text=item: self.open_message_screen(text)} for item in content]
+
+    def populate_yourself(self, new_person):
+        self.data.append({'text': new_person, 'on_release': lambda text=new_person: self.open_message_screen(text)})
+        self.refresh_from_data()
 
     def open_message_screen(self, selected_item_text):
         # Call the go_message method from AttendeesPopup
