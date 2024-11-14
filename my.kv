@@ -4,15 +4,6 @@ WindowManager:
     MainWindow:
     CreateEvent:
 
-<EventScroll>:
-    viewclass: "Button"
-    RecycleBoxLayout:
-        default_size: None, 100
-        default_size_hint: 1, None
-        size_hint_y: None
-        height: self.minimum_height
-        orientation: 'vertical'
-
 <PeopleScroll>:
     viewclass: "Button"
     RecycleBoxLayout:
@@ -23,6 +14,7 @@ WindowManager:
         orientation: 'vertical'
 
 <MainWindow>:
+    on_pre_enter: self.refresh_event_scroll()
     size: root.width, root.height
     name: "main"
     GridLayout:
@@ -40,11 +32,19 @@ WindowManager:
         Label:
             size_hint: 1, .1
             text: "Showing Results"
-        EventScroll:
-            size_hint: 1, .5
+        RecycleView:
+            viewclass: "Button"
+            id: event_scroll
+            RecycleBoxLayout:
+                spacing: 30
+                #default_size: None, 100
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
         GridLayout:
             cols: 4
-            size_hint: 1, .2
+            size_hint: 1, .1
             Button: 
                 text: "Home"
             Button: 
@@ -80,6 +80,10 @@ WindowManager:
             Label:
                 text: "CREATE A NEW EVENT"
         Label:
+            id: error
+            text: ""
+            color: 1, 0, 0, 1
+        Label:
             text: "Event Name"
         TextInput:
             id: event_name
@@ -114,14 +118,16 @@ WindowManager:
                 Label: 
                     text: "AM"
                 CheckBox: 
+                    id: s_am
                     group: "s_am_pm"
-                    on_active: root.am_pm_clicked(self, self.active, "AM")
+                    on_active: root.s_am_pm_clicked(self, self.active, "AM")
                     color: (255, 255, 255, 1)
                 Label: 
                     text: "PM"
                 CheckBox: 
+                    id: s_pm
                     group: "s_am_pm"
-                    on_active: root.am_pm_clicked(self, self.active, "PM")
+                    on_active: root.s_am_pm_clicked(self, self.active, "PM")
                     color: (255, 255, 255, 1)
         Label:
             text: "End time"
@@ -144,18 +150,18 @@ WindowManager:
                 Label: 
                     text: "AM"
                 CheckBox: 
+                    id: e_am
                     group: "e_am_pm"
-                    on_active: root.am_pm_clicked(self, self.active, "AM")
+                    on_active: root.e_am_pm_clicked(self, self.active, "AM")
                     color: (255, 255, 255, 1)
                 Label: 
                     text: "PM"
                 CheckBox: 
+                    id: e_pm
                     group: "e_am_pm"
-                    on_active: root.am_pm_clicked(self, self.active, "PM")
+                    on_active: root.e_am_pm_clicked(self, self.active, "PM")
                     color: (255, 255, 255, 1)
             
-        
-
         Label: 
             text: "Date"
         GridLayout: 
@@ -172,8 +178,34 @@ WindowManager:
                 id: year_select
                 text: "Year"
                 values: ["2024", "2025"]
-                
-
+        Label: 
+            text: "Athletics  Shows  Workshops  Social    Clubs   Professional"
+        GridLayout:
+            cols: 6
+            CheckBox: 
+                id: cat_at
+                on_active: root.category_clicked(self, self.active, " Athletics")
+                color: (255, 255, 255, 1)
+            CheckBox: 
+                id: cat_sh
+                on_active: root.category_clicked(self, self.active, " Shows")
+                color: (255, 255, 255, 1)
+            CheckBox: 
+                id: cat_wo
+                on_active: root.category_clicked(self, self.active, " Workshops")
+                color: (255, 255, 255, 1)
+            CheckBox: 
+                id: cat_so
+                on_active: root.category_clicked(self, self.active, " Social")
+                color: (255, 255, 255, 1)
+            CheckBox: 
+                id: cat_cl
+                on_active: root.category_clicked(self, self.active, " Clubs")
+                color: (255, 255, 255, 1)
+            CheckBox: 
+                id: cat_pr
+                on_active: root.category_clicked(self, self.active, " Professional")
+                color: (255, 255, 255, 1)
         Label:
             text: "Description"
         TextInput:
@@ -181,7 +213,9 @@ WindowManager:
             multiline: True   
         Button:
             text: "Create event"
-
+            on_release: 
+                root.manager.transition.direction = "right"
+                root.on_submit()
 
 <EventFilter>
     name: "event_filters"
@@ -517,7 +551,7 @@ WindowManager:
         Label:
             id: event_label  # Assigning id to reference it in Python code
             text: "Event details will appear here."
-            halign: "left"
+            text_size: self.width, None
         
         Button:
             text: "Attendees"

@@ -3,11 +3,6 @@ from kivy.app import App
 from kivy.config import Config
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.popup import Popup
-from kivy.uix.switch import Switch
-from kivy.uix.checkbox import CheckBox 
-from kivy.uix.scrollview import ScrollView
 from kivy.uix.label import Label
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.button import Button
@@ -19,6 +14,23 @@ Config.set('graphics', 'height', '720')
 
 # NAVIGATION
 class MainWindow(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.data = []
+        # Read database file content
+        with open("eventdb.txt", "r") as my_file:
+            content = my_file.read().split("\n")
+        
+        # Clean up the content
+        for i in range(len(content)):
+            content[i] = content[i].replace("|", "---", 1)
+            content[i] = content[i].replace("|", "\n", 1)
+            content[i] = content[i].replace("|", "---", 1)
+            content[i] = content[i].replace("|", "\n")
+
+        # Populate data for RecycleView with an on_release event to open the event screen
+        self.data =  [{'text': item, 'on_release': lambda text=item: self.open_event_screen(text), "text_size": {self.width, None}, "halign": 'left', "valign": 'top'} for item in content]
+
     def go_create_event(self):
         sm.current = "create_event"
     def go_event_filters(self):
@@ -27,16 +39,29 @@ class MainWindow(Screen):
         sm.current = "message"
     def go_profile(self):
         sm.current = "profile"
+    def open_event_screen(self, selected_item_text):
+        # Get the event screen and set the selected item text
+        event_screen = sm.get_screen("event")  # Ensure this points correctly to the screen manager
+        event_screen.set_selected_item(selected_item_text)
+        sm.current = "event"  # Switch to the event screen
+
+    def refresh_event_scroll(self):
+        self.ids.event_scroll.data = self.data
+        self.ids.event_scroll.refresh_from_data()
+
+    def populate_new_event(self, new_event):
+        new_event = new_event.replace("|", "---", 1)
+        new_event = new_event.replace("|", "\n", 1)
+        new_event = new_event.replace("|", "---", 1)
+        new_event = new_event.replace("|", "\n")
+
+        self.data.append({'text': new_event, 'on_release': lambda text=new_event: self.open_event_screen(text), "text_size": {self.width, None}, "halign": 'left', "valign": 'top'})
 
 class CreateEvent(Screen):
     def __init__(self,  **kwargs):
         super().__init__( **kwargs)
         self.data = [""] * 15
-        self.data[3] = '0'
-        self.data[4] = '0'
-        self.data[6] = '0'
-        self.data[7] = '0'
-        self.data[14] = '1'
+        self.cats = ""
 
     # Name | Organizer | Location | Start Hour : Start Minute AM/PM - End Hour : End Minute AM/PM | Month Day, Year | Description | Tags | Num People
     def on_submit(self):
@@ -51,21 +76,28 @@ class CreateEvent(Screen):
         self.data[10] = (self.ids.day_select.text)
         self.data[11] = (self.ids.year_select.text)
         self.data[12] = (self.ids.description.text)
-        self.data[13] = ""
+        self.data[13] = self.cats
         self.data[14] = "1"
 
-        print(self.data)
+        self.allow_submit()
 
-        # write data to "database"
-        f = open('eventdb.txt', 'a')
-        to_add = "\n" + self.data[0] + " | " + self.data[1] + " | " + self.data[2] + " | " + self.data[3] + ":" + self.data[4] + " " + self.data[5] + " - " + self.data[6] + ":" + self.data[7] + " " + self.data[8] + " | " + self.data[9] + " " + self.data[10] + ", " + self.data[11] + " | " + self.data[12] + " | " + self.data[13] + " | " + self.data[14]
-        print(to_add)
-        f.write(to_add)
-        f.close()
+    def allow_submit(self):
+        self.ids.error.text = ""
+        for i in self.data:
+            if i == "" or i == "Month" or i == "Day" or i == "Year":
+                self.ids.error.text = "All fields are required"
+        if self.ids.error.text == "":
+            # write data to "database"
+            f = open('eventdb.txt', 'a')
+            to_add = "\n" + self.data[0] + " | " + self.data[1] +  " | " + self.data[3] + ":" + self.data[4] + " " + self.data[5] + " - " + self.data[6] + ":" + self.data[7] + " " + self.data[8] + " | " + self.data[9] + " " + self.data[10] + ", " + self.data[11] + " | " + self.data[2] + " | " + self.data[12] + " |" + self.data[13] + " | " + self.data[14]
+            f.write(to_add)
+            f.close()
+            self.clear_inputs()
 
-        #return to main page
-        sm.current = "main"
-   
+            #return to main page
+            sm.get_screen("main").populate_new_event(to_add)
+            sm.current = "main"
+    
     def go_back(self):
         sm.current = "main"
     def s_am_pm_clicked(self, instance, val, am_pm):
@@ -74,9 +106,35 @@ class CreateEvent(Screen):
     def e_am_pm_clicked(self, instance, val, am_pm):
         if (val):
             self.data[8] = am_pm
-            print(self.data)
-    
-        
+    def category_clicked(self, instance, val, cat):
+        if (val):
+            self.cats = self.cats + cat
+        else:
+            self.cats = self.cats.replace(cat, '')
+            
+    def clear_inputs(self):
+        self.ids.event_name.text = ""
+        self.ids.event_organizer.text = ""
+        self.ids.event_location.text = ""
+        self.ids.s_hour_select.text = "00"
+        self.ids.s_minute_select.text = "00"
+        self.ids.e_hour_select.text = "00"
+        self.ids.e_minute_select.text = "00"
+        self.ids.month_select.text = "Month"
+        self.ids.day_select.text = "Day"
+        self.ids.year_select.text = "Year"
+        self.ids.description.text = ""
+        self.ids.s_am.active = False
+        self.ids.s_pm.active = False
+        self.ids.e_am.active = False
+        self.ids.e_pm.active = False
+        self.ids.cat_at.active = False
+        self.ids.cat_sh.active = False
+        self.ids.cat_wo.active = False
+        self.ids.cat_so.active = False
+        self.ids.cat_cl.active = False
+        self.ids.cat_pr.active = False
+
 
 class EventFilter(Screen):
     def go_back(self):
@@ -183,31 +241,8 @@ class Event(Screen):
         # Custom button logic here
         print("Custom button clicked!")
     
-
-
 class WindowManager(ScreenManager):
     pass
-
-class EventScroll(RecycleView):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        
-        # Read file content
-        with open("eventdb.txt", "r") as my_file:
-            content = my_file.read().split("\n")
-        
-        # Clean up the content
-        for i in range(len(content)):
-            content[i] = content[i].replace("|", "\n")
-        
-        # Populate data for RecycleView with an on_release event to open the event screen
-        self.data = [{'text': item, 'on_release': lambda text=item: self.open_event_screen(text)} for item in content]
-
-    def open_event_screen(self, selected_item_text):
-        # Get the event screen and set the selected item text
-        event_screen = self.parent.parent.manager.get_screen("event")  # Ensure this points correctly to the screen manager
-        event_screen.set_selected_item(selected_item_text)
-        self.parent.parent.manager.current = "event"  # Switch to the event screen
 
 class PeopleScroll(RecycleView):
     def __init__(self, **kwargs):
