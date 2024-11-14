@@ -10,6 +10,8 @@ from kivy.uix.checkbox import CheckBox
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.label import Label
 from kivy.uix.recycleview import RecycleView
+from kivy.uix.button import Button
+from kivy.uix.boxlayout import BoxLayout
 
 # Set the window size
 Config.set('graphics', 'width', '400')
@@ -135,6 +137,7 @@ class Message(Screen):
 class Profile(Screen):
     def go_back(self):
         sm.current = "main"
+
 class Event(Screen):
     def go_back(self):
         self.manager.current = "main"
@@ -145,6 +148,40 @@ class Event(Screen):
     def set_selected_item(self, selected_item):
         # Update the label with the selected item's text
         self.ids.event_label.text = selected_item.replace("|", "\n")
+
+    def open_attendees_popup(self):
+        # Create and open the AttendeesPopup
+        attendees_popup = AttendeesPopup()
+
+        # Create the PeopleScroll instance
+        people_scroll = PeopleScroll()
+
+        layout = BoxLayout(orientation='vertical')
+
+        # Bind the attendees_popup reference to the PeopleScroll instance
+        people_scroll.attendees_popup = attendees_popup
+
+        scroll_view = ScrollView()
+        scroll_view.add_widget(people_scroll)
+
+        layout.add_widget(scroll_view)
+
+        button1 = Button(text="Can't find anyone? Add yourself to the list!")
+        button1.bind(on_release=self.add_to_list)  # Bind the button to the 'add_to_list' method
+        layout.add_widget(button1)
+        
+        
+
+        
+        # Set the PeopleScroll as the content of the AttendeesPopup
+        attendees_popup.content = layout
+
+        # Open the popup
+        attendees_popup.open()
+
+    def add_to_list(self, instance):
+        # Custom button logic here
+        print("Custom button clicked!")
     
 
 
@@ -175,6 +212,7 @@ class EventScroll(RecycleView):
 class PeopleScroll(RecycleView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.attendees_popup = None
         content = []
         my_file = open("peopledb.txt", "r")
         content_read = my_file.read()
@@ -183,7 +221,20 @@ class PeopleScroll(RecycleView):
         for i in range(len(content)):
             content[i] = content[i].replace("|", "\n")
          
-        self.data = [{'text': item} for item in content]
+        self.data = [{'text': item, 'on_release': lambda text=item: self.open_message_screen(text)} for item in content]
+
+    def open_message_screen(self, selected_item_text):
+        # Call the go_message method from AttendeesPopup
+        if self.attendees_popup:
+            self.attendees_popup.go_message()
+
+class AttendeesPopup(Popup):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def go_message(self):
+        sm.current = "message"
+        self.dismiss()
 
 
 kv = Builder.load_file("my.kv")

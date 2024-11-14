@@ -505,16 +505,45 @@ WindowManager:
 
 <Event>
     name: "event"
-    BoxLayout:
-        orientation: "vertical"
+    GridLayout:
+        cols: 1
+        size: root.width, root.height
+
+        Button:
+            text: "Go Back"
+            size_hint: 1, .2
+            on_release: root.go_back()
         
         Label:
             id: event_label  # Assigning id to reference it in Python code
             text: "Event details will appear here."
+            halign: "left"
         
         Button:
-            text: "Go Back"
-            on_release: root.go_back()
+            text: "Attendees"
+            size_hint: 1, .2
+            on_release: root.open_attendees_popup()
+
+<AttendeesPopup>:
+    title: 'Attendees'
+    auto_dismiss: False
+    size_hint: 1, .8
+
+    BoxLayout:
+        orientation: "vertical"
+        padding: 10
+        spacing: 10
+
+        Button:
+            size_hint_y: 0.4
+            text: "Can't find anyone? Add yourself to the list!"
+    
+
+
+        
+
+        
+        
 
 
 <Profile>:
