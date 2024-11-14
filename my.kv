@@ -171,7 +171,28 @@ WindowManager:
                 id: year_select
                 text: "Year"
                 values: ["2024", "2025"]
-                
+        Label: 
+            text: "Athletics  Shows  Workshops  Social    Clubs   Professional"
+        GridLayout:
+            cols: 6
+            CheckBox: 
+                on_active: root.category_clicked(self, self.active, " Athletics")
+                color: (255, 255, 255, 1)
+            CheckBox: 
+                on_active: root.category_clicked(self, self.active, " Shows")
+                color: (255, 255, 255, 1)
+            CheckBox: 
+                on_active: root.category_clicked(self, self.active, " Workshops")
+                color: (255, 255, 255, 1)
+            CheckBox: 
+                on_active: root.category_clicked(self, self.active, " Social")
+                color: (255, 255, 255, 1)
+            CheckBox: 
+                on_active: root.category_clicked(self, self.active, " Clubs")
+                color: (255, 255, 255, 1)
+            CheckBox: 
+                on_active: root.category_clicked(self, self.active, " Professional")
+                color: (255, 255, 255, 1)
         Label:
             text: "Description"
         TextInput:

@@ -25,11 +25,7 @@ class CreateEvent(Screen):
     def __init__(self,  **kwargs):
         super().__init__( **kwargs)
         self.data = [""] * 15
-        self.data[3] = '0'
-        self.data[4] = '0'
-        self.data[6] = '0'
-        self.data[7] = '0'
-        self.data[14] = '1'
+        self.cats = ""
 
     # Name | Organizer | Location | Start Hour : Start Minute AM/PM - End Hour : End Minute AM/PM | Month Day, Year | Description | Tags | Num People
     def on_submit(self):
@@ -44,14 +40,12 @@ class CreateEvent(Screen):
         self.data[10] = (self.ids.day_select.text)
         self.data[11] = (self.ids.year_select.text)
         self.data[12] = (self.ids.description.text)
-        self.data[13] = ""
+        self.data[13] = self.cats
         self.data[14] = "1"
-
-        print(self.data)
 
         # write data to "database"
         f = open('eventdb.txt', 'a')
-        to_add = "\n" + self.data[0] + " | " + self.data[1] +  " | " + self.data[3] + ":" + self.data[4] + " " + self.data[5] + " - " + self.data[6] + ":" + self.data[7] + " " + self.data[8] + " | " + self.data[9] + " " + self.data[10] + ", " + self.data[11] + " | " + self.data[2] + " | " + self.data[12] + " | " + self.data[13] + " | " + self.data[14]
+        to_add = "\n" + self.data[0] + " | " + self.data[1] +  " | " + self.data[3] + ":" + self.data[4] + " " + self.data[5] + " - " + self.data[6] + ":" + self.data[7] + " " + self.data[8] + " | " + self.data[9] + " " + self.data[10] + ", " + self.data[11] + " | " + self.data[2] + " | " + self.data[12] + " |" + self.data[13] + " | " + self.data[14]
         print(to_add)
         f.write(to_add)
         f.close()
@@ -67,7 +61,12 @@ class CreateEvent(Screen):
     def e_am_pm_clicked(self, instance, val, am_pm):
         if (val):
             self.data[8] = am_pm
-            print(self.data)  
+    def category_clicked(self, instance, val, cat):
+        if (val):
+            self.cats = self.cats + cat
+        else:
+            self.cats = self.cats.replace(cat, '')
+            
     def clear_inputs(self):
         self.ids.event_name.text = ""
         self.ids.event_organizer.text = ""
