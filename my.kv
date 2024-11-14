@@ -118,12 +118,14 @@ WindowManager:
                 Label: 
                     text: "AM"
                 CheckBox: 
+                    id: s_am
                     group: "s_am_pm"
                     on_active: root.s_am_pm_clicked(self, self.active, "AM")
                     color: (255, 255, 255, 1)
                 Label: 
                     text: "PM"
                 CheckBox: 
+                    id: s_pm
                     group: "s_am_pm"
                     on_active: root.s_am_pm_clicked(self, self.active, "PM")
                     color: (255, 255, 255, 1)
@@ -148,12 +150,14 @@ WindowManager:
                 Label: 
                     text: "AM"
                 CheckBox: 
+                    id: e_am
                     group: "e_am_pm"
                     on_active: root.e_am_pm_clicked(self, self.active, "AM")
                     color: (255, 255, 255, 1)
                 Label: 
                     text: "PM"
                 CheckBox: 
+                    id: e_pm
                     group: "e_am_pm"
                     on_active: root.e_am_pm_clicked(self, self.active, "PM")
                     color: (255, 255, 255, 1)
@@ -179,21 +183,27 @@ WindowManager:
         GridLayout:
             cols: 6
             CheckBox: 
+                id: cat_at
                 on_active: root.category_clicked(self, self.active, " Athletics")
                 color: (255, 255, 255, 1)
             CheckBox: 
+                id: cat_sh
                 on_active: root.category_clicked(self, self.active, " Shows")
                 color: (255, 255, 255, 1)
             CheckBox: 
+                id: cat_wo
                 on_active: root.category_clicked(self, self.active, " Workshops")
                 color: (255, 255, 255, 1)
             CheckBox: 
+                id: cat_so
                 on_active: root.category_clicked(self, self.active, " Social")
                 color: (255, 255, 255, 1)
             CheckBox: 
+                id: cat_cl
                 on_active: root.category_clicked(self, self.active, " Clubs")
                 color: (255, 255, 255, 1)
             CheckBox: 
+                id: cat_pr
                 on_active: root.category_clicked(self, self.active, " Professional")
                 color: (255, 255, 255, 1)
         Label:

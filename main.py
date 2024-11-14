@@ -47,7 +47,7 @@ class MainWindow(Screen):
         self.ids.event_scroll.data = self.data
         self.ids.event_scroll.refresh_from_data()
 
-    def test(self, new_event):
+    def populate_new_event(self, new_event):
         new_event = new_event.replace("|", "---", 1)
         new_event = new_event.replace("|", "\n", 1)
         new_event = new_event.replace("|", "---", 1)
@@ -82,7 +82,7 @@ class CreateEvent(Screen):
     def allow_submit(self):
         self.ids.error.text = ""
         for i in self.data:
-            if i == "":
+            if i == "" or i == "Month" or i == "Day" or i == "Year":
                 self.ids.error.text = "All fields are required"
         if self.ids.error.text == "":
             # write data to "database"
@@ -93,7 +93,7 @@ class CreateEvent(Screen):
             self.clear_inputs()
 
             #return to main page
-            sm.get_screen("main").test(to_add)
+            sm.get_screen("main").populate_new_event(to_add)
             sm.current = "main"
     
     def go_back(self):
@@ -114,14 +114,24 @@ class CreateEvent(Screen):
         self.ids.event_name.text = ""
         self.ids.event_organizer.text = ""
         self.ids.event_location.text = ""
-        self.ids.s_hour_select.text = ""
-        self.ids.s_minute_select.text = ""
-        self.ids.e_hour_select.text = ""
-        self.ids.e_minute_select.text = ""
-        self.ids.month_select.text = ""
-        self.ids.day_select.text = ""
-        self.ids.year_select.text = ""
+        self.ids.s_hour_select.text = "00"
+        self.ids.s_minute_select.text = "00"
+        self.ids.e_hour_select.text = "00"
+        self.ids.e_minute_select.text = "00"
+        self.ids.month_select.text = "Month"
+        self.ids.day_select.text = "Day"
+        self.ids.year_select.text = "Year"
         self.ids.description.text = ""
+        self.ids.s_am.active = False
+        self.ids.s_pm.active = False
+        self.ids.e_am.active = False
+        self.ids.e_pm.active = False
+        self.ids.cat_at.active = False
+        self.ids.cat_sh.active = False
+        self.ids.cat_wo.active = False
+        self.ids.cat_so.active = False
+        self.ids.cat_cl.active = False
+        self.ids.cat_pr.active = False
 
 
 class EventFilter(Screen):
