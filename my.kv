@@ -525,7 +525,7 @@ WindowManager:
         col_default_width: '195dp'
         Button:
             text: 'Yes'
-            on_release: root.dismiss()
+            on_release: (root.dismiss(), Factory.ConfirmTogetherPopup().open())
         Button:
             text: 'No'
             on_release: root.dismiss()
@@ -543,10 +543,28 @@ WindowManager:
         col_default_width: '195dp'
         Button:
             text: 'Yes'
-            on_release: root.dismiss()
+            on_release: (root.dismiss(), Factory.ConfirmReportPopup().open())
         Button:
             text: 'No'
             on_release: root.dismiss()
+
+<ConfirmTogetherPopup@Popup>:
+    title: 'You are now going to the event with *person*'
+    auto_dismiss: False
+    size_hint: 1, .2
+
+    Button:
+        text: 'Okay'
+        on_release: root.dismiss()
+
+<ConfirmReportPopup@Popup>:
+    title: 'Thank you. We have received your report and are now taking action.'
+    auto_dismiss: False
+    size_hint: 1, .2
+
+    Button:
+        text: 'Okay'
+        on_release: root.dismiss()
 
 
 <Event>
