@@ -24,8 +24,8 @@ WindowManager:
             size_hint: 1, .1
             text: "EVENTS"
         Button: 
-            size_hint: 1, .1
-            text: "Select Filters v"
+            size_hint: .5, .1
+            text: "Select Event Filters v"
             on_release: 
                 root.manager.transition.direction = "up"
                 root.go_event_filters()
@@ -46,9 +46,7 @@ WindowManager:
             cols: 4
             size_hint: 1, .1
             Button: 
-                text: "Home"
-            Button: 
-                text: "+"
+                text: "Add An Event"
                 on_release: 
                     root.manager.transition.direction = "left"
                     root.go_create_event()
@@ -178,8 +176,11 @@ WindowManager:
                 id: year_select
                 text: "Year"
                 values: ["2024", "2025"]
+        Label:
+            text: "Type of Event"
+
         Label: 
-            text: "Athletics  Shows  Workshops  Social    Clubs   Professional"
+            text: "Athletic   Show    Workshop   Social    Club   Professional"
         GridLayout:
             cols: 6
             CheckBox: 
@@ -224,7 +225,7 @@ WindowManager:
         size: root.width, root.height
 
         Button:
-            text: "Select Filters ^"
+            text: "Select Event Filters ^"
             on_release: 
                 root.manager.transition.direction = "down"
                 root.go_back()
@@ -299,11 +300,13 @@ WindowManager:
                 CheckBox: 
                     group: "s_am_pm"
                     on_active: root.am_pm_clicked(self, self.active, "AM")
+                    color: (255, 255, 255, 1)
                 Label: 
                     text: "PM"
                 CheckBox: 
                     group: "s_am_pm"
                     on_active: root.am_pm_clicked(self, self.active, "PM")
+                    color: (255, 255, 255, 1)
         
         GridLayout:
             size_hint: .5, 1
@@ -327,18 +330,27 @@ WindowManager:
                 CheckBox: 
                     group: "e_am_pm"
                     on_active: root.am_pm_clicked(self, self.active, "AM")
+                    color: (255, 255, 255, 1)
                 Label: 
                     text: "PM"
                 CheckBox: 
                     group: "e_am_pm"
                     on_active: root.am_pm_clicked(self, self.active, "PM")
+                    color: (255, 255, 255, 1)
                  
-
+         
         Label:
-            text: "Popularity"
-        Switch:
-            active: True
-            on_active: root.switch_callback(self, self.active)
+            text: "Filer By Event Popularity"
+        GridLayout:
+            size_hint: .5, 1
+            cols: 3
+            Label:
+                text: "most popular first"
+            Switch:
+                active: True
+                on_active: root.switch_callback(self, self.active)
+            Label:
+                text: "least popular first"
 
         Label:
             text: "Types"  
