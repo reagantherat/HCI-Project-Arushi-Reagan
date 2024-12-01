@@ -630,7 +630,17 @@ WindowManager:
                 root.manager.transition.direction = "right"
                 root.go_back()
 
-            
+<MessageHolder>:
+    GridLayout:
+        cols: 1
+        Label:
+            text: "This page will have a list of the people that you have messaged, to be able to interact with them again or leave and then return to your conversation."
+            text_size: self.width, None
+        Button:
+            text: "Go to Main"
+            on_release: 
+                root.manager.transition.direction = "right"
+                root.go_back()     
             
             
             

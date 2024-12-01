@@ -38,7 +38,7 @@ class MainWindow(Screen):
     def go_event_filters(self):
         sm.current = "event_filters"
     def go_message(self):
-        sm.current = "message"
+        sm.current = "message_holder"
     def go_profile(self):
         sm.current = "profile"
     def open_event_screen(self, selected_item_text):
@@ -220,6 +220,10 @@ class Profile(Screen):
     def go_back(self):
         sm.current = "main"
 
+class MessageHolder(Screen):
+    def go_back(self):
+        sm.current = "main"
+
 class Event(Screen):
     def go_back(self):
         self.manager.current = "main"
@@ -318,7 +322,7 @@ class AttendeesPopup(Popup):
 kv = Builder.load_file("my.kv")
 sm = WindowManager()
 
-screens = [MainWindow(name="main"), CreateEvent(name="create_event"), EventFilter(name="event_filters"), Message(name="message"), Profile(name="profile"), Event(name="event")]
+screens = [MainWindow(name="main"), CreateEvent(name="create_event"), EventFilter(name="event_filters"), Message(name="message"), MessageHolder(name="message_holder"), Profile(name="profile"), Event(name="event")]
 for screen in screens:
     sm.add_widget(screen)
 
