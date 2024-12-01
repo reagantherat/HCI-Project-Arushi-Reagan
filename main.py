@@ -255,6 +255,7 @@ class Event(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.attendees_popup = None
+        self.layout = BoxLayout(orientation='vertical')
 
     def set_selected_item(self, selected_item):
         # Update the label with the selected item's text
@@ -267,11 +268,9 @@ class Event(Screen):
         # Create the PeopleScroll instance
         people_scroll = PeopleScroll()
 
-        layout = BoxLayout(orientation='vertical')
-
         button1 = Button(text="< Go back", size_hint_y=None, height=90, size_hint_x=None, width=200)
         button1.bind(on_release=self.close_popup)  # Bind the button to the 'add_to_list' method
-        layout.add_widget(button1)
+        self.layout.add_widget(button1)
 
         # Bind the attendees_popup reference to the PeopleScroll instance
         people_scroll.attendees_popup = self.attendees_popup
@@ -280,26 +279,22 @@ class Event(Screen):
         scroll_view = ScrollView()
         scroll_view.add_widget(people_scroll)
 
-        layout.add_widget(scroll_view)
+        self.layout.add_widget(scroll_view)
 
         button2 = Button(text="Can't find anyone? Add yourself to the list!", size_hint_y=None, height=90)
         button2.bind(on_release=self.add_to_list)  # Bind the button to the 'add_to_list' method
-        layout.add_widget(button2)
+        self.layout.add_widget(button2)
         
         # Set the PeopleScroll as the content of the AttendeesPopup
-        self.attendees_popup.content = layout
+        self.attendees_popup.content = self.layout
 
         # Open the popup
         self.attendees_popup.open()
 
     def add_to_list(self, instance):
-        f = open('peopledb.txt', 'a')
-        to_add = "\n" + "You have added yourself to this list!"
-        f.write(to_add)
-        f.close()
+        label1 = Label(text= "You have added yourself to this list!", size_hint_y=None, height=90)
+        self.layout.add_widget(label1)
 
-        if self.attendees_popup and self.attendees_popup.people_scroll:
-            self.attendees_popup.people_scroll.populate_yourself(to_add)
         parent = instance.parent
         if parent:
             parent.remove_widget(instance)
