@@ -112,9 +112,12 @@ WindowManager:
                 text: "00"
                 values: ["00", "15", "30", "45"]
             GridLayout:
+                id: s_am_pm_select
                 cols: 2
+                color: (1, 0, 0, 1)
                 Label: 
                     text: "AM"
+                    id: s_am_label
                 CheckBox: 
                     id: s_am
                     group: "s_am_pm"
@@ -122,6 +125,7 @@ WindowManager:
                     color: (255, 255, 255, 1)
                 Label: 
                     text: "PM"
+                    id: s_pm_label
                 CheckBox: 
                     id: s_pm
                     group: "s_am_pm"
@@ -144,9 +148,11 @@ WindowManager:
                 text: "00"
                 values: ["00", "15", "30", "45"]
             GridLayout:
+                id: e_am_pm_select
                 cols: 2
                 Label: 
                     text: "AM"
+                    id: e_am_label
                 CheckBox: 
                     id: e_am
                     group: "e_am_pm"
@@ -154,6 +160,7 @@ WindowManager:
                     color: (255, 255, 255, 1)
                 Label: 
                     text: "PM"
+                    id: e_pm_label
                 CheckBox: 
                     id: e_pm
                     group: "e_am_pm"
@@ -178,10 +185,12 @@ WindowManager:
                 values: ["2024", "2025"]
         Label:
             text: "Type of Event"
+            id: categories
 
         Label: 
             text: "Athletic   Show    Workshop   Social    Club   Professional"
         GridLayout:
+            
             cols: 6
             CheckBox: 
                 id: cat_at
@@ -603,18 +612,18 @@ WindowManager:
             text: "Can't find anyone? Add yourself to the list!"
     
 
-
-        
-
-        
-        
-
-
 <Profile>:
     GridLayout:
         cols: 1
         Label:
-            text: "This is the profile screen"
+            text: "This page will include the following information. You can change the interests as you like."
+            text_size: self.width, None
+        Label:
+            text: "Name"
+        Label:
+            text: "Year and Gender"
+        Label:
+            text: "Three interests you have"
         Button:
             text: "Go to Main"
             on_release: 

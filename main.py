@@ -64,6 +64,7 @@ class CreateEvent(Screen):
         super().__init__( **kwargs)
         self.data = [""] * 15
         self.cats = ""
+        self.texts = []
 
     # Name | Organizer | Location | Start Hour : Start Minute AM/PM - End Hour : End Minute AM/PM | Month Day, Year | Description | Tags | Num People
     def on_submit(self):
@@ -81,12 +82,26 @@ class CreateEvent(Screen):
         self.data[13] = self.cats
         self.data[14] = "1"
 
+        self.texts = [self.ids.event_name, self.ids.event_organizer, self.ids.event_location, self.ids.s_hour_select, self.ids.s_minute_select, self.ids.s_am_pm_select, self.ids.e_hour_select, self.ids.e_minute_select, self.ids.e_am_pm_select, self.ids.month_select, self.ids.day_select, self.ids.year_select, self.ids.description, self.ids.categories, ""]
+        for i in range(13):
+            self.texts[i].background_color = (1, 1, 1, 1)
+
         self.allow_submit()
 
     def allow_submit(self):
         self.ids.error.text = ""
-        for i in self.data:
-            if i == "" or i == "Month" or i == "Day" or i == "Year":
+        for i in range(len(self.data)):
+            if self.data[i] == "" or self.data[i] == "Month" or self.data[i] == "Day" or self.data[i] == "Year":
+                if (i == 13):
+                    self.texts[i].color = (1, 0, 0, 1)
+                elif (i == 5):
+                    self.ids.s_am_label.color = (1, 0, 0, 1)
+                    self.ids.s_pm_label.color = (1, 0, 0, 1)
+                elif (i == 8):
+                    self.ids.e_am_label.color = (1, 0, 0, 1)
+                    self.ids.e_pm_label.color = (1, 0, 0, 1)
+                else:
+                    self.texts[i].background_color = (1, 0, 0, 1)
                 self.ids.error.text = "All fields are required"
         if self.ids.error.text == "":
             # write data to "database"
@@ -101,6 +116,7 @@ class CreateEvent(Screen):
             sm.current = "main"
     
     def go_back(self):
+        self.clear_inputs()
         sm.current = "main"
     def s_am_pm_clicked(self, instance, val, am_pm):
         if (val):
@@ -115,6 +131,12 @@ class CreateEvent(Screen):
             self.cats = self.cats.replace(cat, '')
             
     def clear_inputs(self):
+        self.texts = [self.ids.event_name, self.ids.event_organizer, self.ids.event_location, self.ids.s_hour_select, self.ids.s_minute_select, self.ids.s_am_pm_select, self.ids.e_hour_select, self.ids.e_minute_select, self.ids.e_am_pm_select, self.ids.month_select, self.ids.day_select, self.ids.year_select, self.ids.description, self.ids.categories, ""]
+        for i in range(13):
+            self.texts[i].background_color = (1, 1, 1, 1)
+
+        self.ids.error.text = ""
+
         self.ids.event_name.text = ""
         self.ids.event_organizer.text = ""
         self.ids.event_location.text = ""
@@ -235,9 +257,6 @@ class Event(Screen):
         button2 = Button(text="Can't find anyone? Add yourself to the list!", size_hint_y=None, height=90)
         button2.bind(on_release=self.add_to_list)  # Bind the button to the 'add_to_list' method
         layout.add_widget(button2)
-        
-        
-
         
         # Set the PeopleScroll as the content of the AttendeesPopup
         self.attendees_popup.content = layout
