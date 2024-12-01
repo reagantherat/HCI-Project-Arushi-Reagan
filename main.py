@@ -194,6 +194,30 @@ class Message(Screen):
             # Scroll to the bottom of the ScrollView to show the latest message
             self.ids.scroll_view.scroll_to(new_label)
 
+    def reset_screen(self):
+        # Reset message input field and the message list text
+        self.ids.message_input.text = ""
+
+        for widget in list(self.ids.layout.children):
+            if isinstance(widget, Label):
+                self.ids.layout.remove_widget(widget)
+
+        self.show_go_together_button()
+
+    def show_go_together_button(self):
+        # Make sure the "Go Together" button is visible
+        go_together_button = self.ids.go_together_button
+        if go_together_button:
+            go_together_button.opacity = 1  # Make button visible again
+            go_together_button.disabled = False  # Enable button interaction
+
+    def hide_go_together_button(self):
+        go_together_button = self.ids.go_together_button
+        if go_together_button:
+            go_together_button.opacity = 0  # Make button invisible
+            go_together_button.disabled = True  
+
+
 class Profile(Screen):
     def go_back(self):
         sm.current = "main"
@@ -253,6 +277,9 @@ class Event(Screen):
 
         if self.attendees_popup and self.attendees_popup.people_scroll:
             self.attendees_popup.people_scroll.populate_yourself(to_add)
+        parent = instance.parent
+        if parent:
+            parent.remove_widget(instance)
 
 
     def close_popup(self, instance):
@@ -286,12 +313,16 @@ class PeopleScroll(RecycleView):
         # Call the go_message method from AttendeesPopup
         if self.attendees_popup:
             self.attendees_popup.go_message()
+            
 
 class AttendeesPopup(Popup):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     def go_message(self):
+        message_screen = sm.get_screen("message")
+        message_screen.reset_screen()
+
         sm.current = "message"
         self.dismiss()
 
@@ -308,6 +339,12 @@ sm.current = "main"
 class MyMainApp(App):
     def build(self):
         return sm
+        
+    def remove_widget(self, widget):
+        # Remove the button from its parent layout
+        parent = widget.parent
+        if parent:
+            parent.remove_widget(widget)
         
 if __name__ == "__main__":
     MyMainApp().run()

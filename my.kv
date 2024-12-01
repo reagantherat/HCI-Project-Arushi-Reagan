@@ -481,10 +481,13 @@ WindowManager:
 
         # Button below the top row
         Button:
-            text: "Go Together"
+            id: go_together_button 
+            text: "Confirm Your Attendance"
             size_hint_y: .1
             height: "40dp"  # Adjust as needed
-            on_release: Factory.GoTogetherPopup().open()
+            on_release: 
+                Factory.GoTogetherPopup().open()
+                root.hide_go_together_button()
 
         # Larger ScrollView for dynamic label addition
         ScrollView:
