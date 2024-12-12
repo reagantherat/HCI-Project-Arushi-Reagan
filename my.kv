@@ -569,15 +569,14 @@ WindowManager:
         text: 'Okay'
         on_release: root.dismiss()
 
-<ConfirmReportPopup@Popup>:
+<ConfirmReportPopup>:
     title: 'Thank you. We have received your report and are now taking action.'
     auto_dismiss: False
     size_hint: 1, .2
 
     Button:
         text: 'Okay'
-        on_release: root.dismiss()
-
+        on_release: root.dismiss_and_open_screen()
 
 <Event>
     name: "event"

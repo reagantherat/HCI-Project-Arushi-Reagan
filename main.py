@@ -353,7 +353,14 @@ class AttendeesPopup(Popup):
         sm.current = "message"
         self.dismiss()
 
-
+class ConfirmReportPopup(Popup):
+    def dismiss_and_open_screen(self):
+        # Dismiss the popup
+        self.dismiss()
+        
+        # Switch to a new screen
+        sm.current = "main"
+        
 kv = Builder.load_file("my.kv")
 sm = WindowManager()
 
