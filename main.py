@@ -9,6 +9,7 @@ from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
 from kivy.uix.scrollview import ScrollView
+from kivy.graphics import Color, RoundedRectangle
 
 # Set the window size
 Config.set('graphics', 'width', '400')
@@ -198,6 +199,13 @@ class Message(Screen):
     def __init__(self, **kwargs):
         super(Message, self).__init__(**kwargs)
 
+    def update_rect(self, instance, value):
+        """Update the rounded rectangle to match the label's size and position."""
+        instance.canvas.before.clear()  # Clear the canvas before redrawing
+        with instance.canvas.before:
+            Color(0.2, 0.6, 0.8, 1)  # Background color (blueish)
+            RoundedRectangle(pos=instance.pos, size=instance.size, radius=[10])
+
     def addthelabel(self):
         # Retrieve text from the TextInput
         text = self.ids.message_input.text.strip()  # Gets and removes extra spaces
@@ -206,6 +214,12 @@ class Message(Screen):
         if text:
             # Create a new label with the text from the TextInput
             new_label = Label(text=text, size_hint_y=None, height="40dp")
+            with new_label.canvas.before:
+                Color(0.2, 0.6, 0.8, 1)  # Background color (blueish)
+                self.rect = RoundedRectangle(pos=new_label.pos, size=new_label.size, radius=[10])
+
+            # Update the shape when the label's size or position changes
+            new_label.bind(pos=self.update_rect, size=self.update_rect)
 
             # Add the label to the layout inside the ScrollView
             self.ids.layout.add_widget(new_label)
@@ -230,7 +244,12 @@ class Event(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.attendees_popup = None
-        self.layout = BoxLayout(orientation='vertical')
+    def go_back(self):
+        self.manager.current = "main"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.attendees_popup = None
 
     def set_selected_item(self, selected_item):
         # Update the label with the selected item's text
@@ -243,9 +262,10 @@ class Event(Screen):
         # Create the PeopleScroll instance
         people_scroll = PeopleScroll()
 
+        layout = BoxLayout(orientation='vertical')
         button1 = Button(text="< Go back", size_hint_y=None, height=90, size_hint_x=None, width=200)
         button1.bind(on_release=self.close_popup)  # Bind the button to the 'add_to_list' method
-        self.layout.add_widget(button1)
+        layout.add_widget(button1)
 
         # Bind the attendees_popup reference to the PeopleScroll instance
         people_scroll.attendees_popup = self.attendees_popup
@@ -254,21 +274,20 @@ class Event(Screen):
         scroll_view = ScrollView()
         scroll_view.add_widget(people_scroll)
 
-        self.layout.add_widget(scroll_view)
+        layout.add_widget(scroll_view)
 
         button2 = Button(text="Can't find anyone? Add yourself to the list!", size_hint_y=None, height=90)
         button2.bind(on_release=self.add_to_list)  # Bind the button to the 'add_to_list' method
-        self.layout.add_widget(button2)
+        layout.add_widget(button2)
 
         # Set the PeopleScroll as the content of the AttendeesPopup
-        self.attendees_popup.content = self.layout
+        self.attendees_popup.content = layout
 
         # Open the popup
         self.attendees_popup.open()
 
     def add_to_list(self, instance):
-        label1 = Label(text= "You have added yourself to this list!", size_hint_y=None, height=90)
-        self.layout.add_widget(label1)
+        self.attendees_popup.title = "Attendees - you've added yourself to the list"
         parent = instance.parent
         if parent:
             parent.remove_widget(instance)
