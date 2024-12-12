@@ -22,7 +22,7 @@ class MainWindow(Screen):
         # Read database file content
         with open("eventdb.txt", "r") as my_file:
             content = my_file.read().split("\n")
-        
+
         # Clean up the content
         for i in range(len(content)):
             content[i] = content[i].replace("|", "---", 1)
@@ -114,7 +114,7 @@ class CreateEvent(Screen):
             #return to main page
             sm.get_screen("main").populate_new_event(to_add)
             sm.current = "main"
-    
+
     def go_back(self):
         self.clear_inputs()
         sm.current = "main"
@@ -129,7 +129,7 @@ class CreateEvent(Screen):
             self.cats = self.cats + cat
         else:
             self.cats = self.cats.replace(cat, '')
-            
+
     def clear_inputs(self):
         self.texts = [self.ids.event_name, self.ids.event_organizer, self.ids.event_location, self.ids.s_hour_select, self.ids.s_minute_select, self.ids.s_am_pm_select, self.ids.e_hour_select, self.ids.e_minute_select, self.ids.e_am_pm_select, self.ids.month_select, self.ids.day_select, self.ids.year_select, self.ids.description, self.ids.categories, ""]
         for i in range(13):
@@ -206,39 +206,15 @@ class Message(Screen):
         if text:
             # Create a new label with the text from the TextInput
             new_label = Label(text=text, size_hint_y=None, height="40dp")
-            
+
             # Add the label to the layout inside the ScrollView
             self.ids.layout.add_widget(new_label)
 
             # Clear the TextInput field after adding the label
             self.ids.message_input.text = ""
-            
+
             # Scroll to the bottom of the ScrollView to show the latest message
             self.ids.scroll_view.scroll_to(new_label)
-
-    def reset_screen(self):
-        # Reset message input field and the message list text
-        self.ids.message_input.text = ""
-
-        for widget in list(self.ids.layout.children):
-            if isinstance(widget, Label):
-                self.ids.layout.remove_widget(widget)
-
-        self.show_go_together_button()
-
-    def show_go_together_button(self):
-        # Make sure the "Go Together" button is visible
-        go_together_button = self.ids.go_together_button
-        if go_together_button:
-            go_together_button.opacity = 1  # Make button visible again
-            go_together_button.disabled = False  # Enable button interaction
-
-    def hide_go_together_button(self):
-        go_together_button = self.ids.go_together_button
-        if go_together_button:
-            go_together_button.opacity = 0  # Make button invisible
-            go_together_button.disabled = True  
-
 
 class Profile(Screen):
     def go_back(self):
@@ -247,11 +223,10 @@ class Profile(Screen):
 class MessageHolder(Screen):
     def go_back(self):
         sm.current = "main"
-
 class Event(Screen):
     def go_back(self):
         self.manager.current = "main"
-    
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.attendees_popup = None
@@ -284,7 +259,7 @@ class Event(Screen):
         button2 = Button(text="Can't find anyone? Add yourself to the list!", size_hint_y=None, height=90)
         button2.bind(on_release=self.add_to_list)  # Bind the button to the 'add_to_list' method
         self.layout.add_widget(button2)
-        
+
         # Set the PeopleScroll as the content of the AttendeesPopup
         self.attendees_popup.content = self.layout
 
@@ -294,18 +269,15 @@ class Event(Screen):
     def add_to_list(self, instance):
         label1 = Label(text= "You have added yourself to this list!", size_hint_y=None, height=90)
         self.layout.add_widget(label1)
-
         parent = instance.parent
         if parent:
             parent.remove_widget(instance)
-
-
     def close_popup(self, instance):
         if self.attendees_popup:
             self.attendees_popup.dismiss()  # Dismiss the popup
             self.attendees_popup = None
 
-    
+
 class WindowManager(ScreenManager):
     pass
 
@@ -320,7 +292,7 @@ class PeopleScroll(RecycleView):
         my_file.close()
         for i in range(len(content)):
             content[i] = content[i].replace("|", "\n")
-         
+
         self.data = [{'text': item, 'on_release': lambda text=item: self.open_message_screen(text)} for item in content]
 
     def populate_yourself(self, new_person):
@@ -331,16 +303,12 @@ class PeopleScroll(RecycleView):
         # Call the go_message method from AttendeesPopup
         if self.attendees_popup:
             self.attendees_popup.go_message()
-            
 
 class AttendeesPopup(Popup):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     def go_message(self):
-        message_screen = sm.get_screen("message")
-        message_screen.reset_screen()
-
         sm.current = "message"
         self.dismiss()
 
@@ -357,12 +325,6 @@ sm.current = "main"
 class MyMainApp(App):
     def build(self):
         return sm
-        
-    def remove_widget(self, widget):
-        # Remove the button from its parent layout
-        parent = widget.parent
-        if parent:
-            parent.remove_widget(widget)
-        
+
 if __name__ == "__main__":
     MyMainApp().run()
